@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace CsSpawnsPlugin.MapProvider;
-public interface IMapProvider
+public interface IBaseMapProvider
 {
     public string MapName { get; set; }
 
