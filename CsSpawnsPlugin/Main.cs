@@ -14,11 +14,11 @@ public class Main(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvid
 
     public override string ModuleVersion => "1.0";
 
-    private string mapName = string.Empty;
+    public string MapName { get; set; } = string.Empty;
 
     public override void Load(bool hotReload)
     {
-        mapName = Server.MapName;
+        MapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
         Logger.LogInformation("Plugin loaded successfully!");
     }
@@ -42,32 +42,10 @@ public class Main(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvid
             return;
         }
 
-        //if (!int.TryParse(command.GetArg(1), out int spawnNumber))
-        //{
-        //    player.PrintToChat("Invalid spawn number.");
-        //    return;
-        //}
-
-        //if (!Spawns.TryGetValue(spawnNumber, out var position))
-        //{
-        //    player.PrintToChat($"Spawn {spawnNumber} does not exist.");
-        //    return;
-        //}
-
         var pawn = player.PlayerPawn.Value;
         if (pawn == null)
             return;
 
-        var mapSpawns = mapResolver.Resolve(mapName);
-
-        var side = player.;
-
-        pawn.Teleport(
-            position,
-            pawn.AbsRotation,
-            Vector3.Zero
-        );
-
-        player.PrintToChat($"Teleported to spawn {spawnNumber}.");
+        var mapSpawns = mapResolver.Resolve(MapName);
     }
 }
