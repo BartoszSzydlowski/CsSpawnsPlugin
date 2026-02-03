@@ -7,7 +7,7 @@ public class RegistrationModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterAssemblyTypes(typeof(IBaseMapProvider).Assembly)
+        builder.RegisterAssemblyTypes(typeof(IBaseSpawnsProvider).Assembly)
            .AsImplementedInterfaces()
            .InstancePerLifetimeScope();
     }
