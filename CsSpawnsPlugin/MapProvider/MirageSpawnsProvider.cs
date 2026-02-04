@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
 namespace CsSpawnsPlugin.MapProvider;
-internal class MirageSpawnsProvider : BaseSpawnsProvider
+public class MirageSpawnsProvider : BaseSpawnsProvider
 {
     public override string MapName => "de_mirage";
 

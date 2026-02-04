@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API;
+﻿using Autofac;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CsSpawnsPlugin;
 
-public class Main(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider) : BasePlugin
+public class SpawnsPlugin : BasePlugin
 {
     public override string ModuleName => "Main";
 
@@ -16,8 +17,26 @@ public class Main(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvid
 
     public string MapName { get; set; } = string.Empty;
 
+    private IContainer? container;
+
+    protected IMapResolver? MapResolver;
+
+    protected IBaseSpawnsProvider? BaseSpawnsProvider;
+
+    public void SetDependencies(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
+    {
+        MapResolver = mapResolver ?? throw new ArgumentNullException(nameof(mapResolver));
+        BaseSpawnsProvider = baseSpawnsProvider ?? throw new ArgumentNullException(nameof(baseSpawnsProvider));
+    }
+
     public override void Load(bool hotReload)
     {
+        if (MapResolver == null || BaseSpawnsProvider == null)
+            throw new InvalidOperationException("SpawnsPlugin dependencies are not initialized. Call SetDependencies(...) before Load().");
+
+        var builder = new ContainerBuilder();
+        container = builder.Build();
+
         MapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
         Logger.LogInformation("Plugin loaded successfully!");
@@ -46,6 +65,6 @@ public class Main(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvid
         if (pawn == null)
             return;
 
-        var mapSpawns = mapResolver.Resolve(MapName);
+        var mapSpawns = MapResolver!.Resolve(MapName);
     }
 }
