@@ -5,8 +5,8 @@ namespace CsSpawnsPlugin.Tests;
 
 public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 {
+	private T spawnProvider = default!;
 	private IMapResolver? MapResolver { get; set; }
-	//public abstract IBaseSpawnsProvider BaseSpawnsProvider { get; }
 	protected SpawnsPluginMock Mock { get; set; } = default!;
 
 	private readonly IBaseSpawnsProvider[] providers =
@@ -15,7 +15,6 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 		new MirageCtSpawnsProvider(),
 	];
 
-	private T spawnProvider = default!;
 
 	//[AssemblyInitialize]
 	//public static void AssemblyInit(TestContext context)
@@ -51,6 +50,35 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 	[TestCleanup]
 	public void TestCleanup()
 	{
+		DisposeIfNeeded(Mock);
+		DisposeIfNeeded(MapResolver);
+		DisposeIfNeeded(spawnProvider);
 
+		if (providers is not null)
+		{
+			foreach (var p in providers)
+			{
+				DisposeIfNeeded(p);
+			}
+		}
+
+		Mock = null!;
+		MapResolver = null;
+		spawnProvider = default!;
+	}
+
+	private void DisposeIfNeeded(object? obj)
+	{
+		if (obj is IDisposable disposable)
+		{
+			try
+			{
+				disposable.Dispose();
+			}
+			catch
+			{
+
+			}
+		}
 	}
 }

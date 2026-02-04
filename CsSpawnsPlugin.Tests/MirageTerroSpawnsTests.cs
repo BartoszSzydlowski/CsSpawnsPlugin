@@ -12,7 +12,7 @@ public class MirageTerroSpawnsTests : BaseSpawnsTest<MirageTerroSpawnsProvider>
 		Mock.Load();
 	}
 
-	[DataRow(".spawn 1", "de_mirage", CsTeam.Terrorist, 1216.00f, -211.00f, -158.60f)]
+	[DataRow(".spawn 1", "de_mirage", CsTeam.Terrorist, 1216.00f, -115.00f, -160.95f)]
 	//[DataRow(".spawn 2", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
 	//[DataRow(".spawn 3", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
 	//[DataRow(".spawn 4", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]

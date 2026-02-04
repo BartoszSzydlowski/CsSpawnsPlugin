@@ -16,4 +16,9 @@ public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMa
 
 		return selectedSpawn;
 	}
+
+	public IBaseSpawnsProvider Resolve(string mapName, CsTeam team)
+	{
+		return spawnsProvdersDic[(mapName, team)];
+	}
 }
