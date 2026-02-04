@@ -27,8 +27,8 @@ public class SpawnsPlugin : BasePlugin
         mapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
         Logger.LogInformation("Plugin loaded successfully!");
-
     }
+
     private void OnMapEnd()
     {
         mapName = Server.MapName;
@@ -45,7 +45,6 @@ public class SpawnsPlugin : BasePlugin
     public HookResult OnPlayerConnect(EventPlayerConnect @event, GameEventInfo info)
     {
         Logger.LogInformation("Player {Name} has connected!", @event.Userid?.PlayerName);
-
         return HookResult.Continue;
     }
 
@@ -54,18 +53,15 @@ public class SpawnsPlugin : BasePlugin
         if (player?.IsValid != true)
             return;
 
-        if (command.ArgCount < 2)
-        {
-            player.PrintToChat("Usage: .spawn <number>");
+        if (!CheckCommandArgCount(player, command))
             return;
-        }
 
         var pawn = player.PlayerPawn.Value;
         if (pawn == null)
             return;
 
         var team = player.Team;
-        var selectedSpawn = Convert.ToInt32(command.GetArg(1));
+        var selectedSpawn = GetSpawnInserted(player, command);
 
         var spawn = mapResolver?.GetSpawn(mapName, team, selectedSpawn);
 
@@ -75,5 +71,28 @@ public class SpawnsPlugin : BasePlugin
             return;
         }
         pawn.Teleport(spawn);
+    }
+
+    private int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
+    {
+        var spawnFromCommand = command.GetArg(1);
+
+        if (!int.TryParse(spawnFromCommand, out int spawnPosition))
+        {
+            player?.PrintToChat("Usage: .spawn <number>");
+            return 0;
+        }
+
+        return spawnPosition;
+    }
+
+    private bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
+    {
+        if (command.ArgCount != 2)
+        {
+            player?.PrintToChat("Usage: .spawn <number>");
+            return false;
+        }
+        return true;
     }
 }

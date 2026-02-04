@@ -1,40 +1,48 @@
-﻿namespace CsSpawnsPlugin.Tests;
+﻿using CsSpawnsPlugin.MapProvider;
+using CsSpawnsPlugin.Resolvers;
+
+namespace CsSpawnsPlugin.Tests;
 
 public abstract class BaseSpawnsTest
 {
-    [AssemblyInitialize]
-    public static void AssemblyInit(TestContext context)
-    {
-        // This method is called once for the test assembly, before any tests are run.
-    }
+    public abstract IMapResolver? MapResolver { get; set; }
+    public abstract IBaseSpawnsProvider BaseSpawnsProvider { get; }
+    protected SpawnsPluginMock Mock { get; set; } = default!;
 
-    [AssemblyCleanup]
-    public static void AssemblyCleanup()
-    {
-        // This method is called once for the test assembly, after all tests are run.
-    }
+    //[AssemblyInitialize]
+    //public static void AssemblyInit(TestContext context)
+    //{
+    //    // This method is called once for the test assembly, before any tests are run.
+    //}
 
-    [ClassInitialize]
-    public static void ClassInit(TestContext context)
-    {
-        // This method is called once for the test class, before any tests of the class are run.
-    }
+    //[AssemblyCleanup]
+    //public static void AssemblyCleanup()
+    //{
+    //    // This method is called once for the test assembly, after all tests are run.
+    //}
 
-    [ClassCleanup]
-    public static void ClassCleanup()
-    {
-        // This method is called once for the test class, after all tests of the class are run.
-    }
+    //[ClassInitialize]
+    //public static void ClassInit(TestContext context)
+    //{
+    //    // This method is called once for the test class, before any tests of the class are run.
+    //}
+
+    //[ClassCleanup]
+    //public static void ClassCleanup()
+    //{
+    //    // This method is called once for the test class, after all tests of the class are run.
+    //}
 
     [TestInitialize]
     public void TestInit()
     {
-        // This method is called before each test method.
+        MapResolver = new MapResolver([BaseSpawnsProvider]);
+        Mock = new SpawnsPluginMock(MapResolver);
     }
 
     [TestCleanup]
     public void TestCleanup()
     {
-        // This method is called after each test method.
+
     }
 }

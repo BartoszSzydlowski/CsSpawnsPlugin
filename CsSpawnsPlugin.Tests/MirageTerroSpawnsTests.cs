@@ -7,15 +7,18 @@ namespace CsSpawnsPlugin.Tests;
 [TestClass]
 public class MirageTerroSpawnsTests : BaseSpawnsTest
 {
-    private IMapResolver? mapResolver;
-    private readonly IBaseSpawnsProvider baseSpawnsProvider = new MirageTerroSpawnsProvider();
+    //private IMapResolver? mapResolver;
+    //private readonly IBaseSpawnsProvider baseSpawnsProvider = new MirageTerroSpawnsProvider();
+    public override IMapResolver? MapResolver { get; set; }
+    public override IBaseSpawnsProvider BaseSpawnsProvider => new MirageTerroSpawnsProvider();
 
     [TestMethod]
     public void Load_ShouldNotThrow()
     {
-        mapResolver = new MapResolver([baseSpawnsProvider]);
-        var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        mock.Load();
+        //mapResolver = new MapResolver([baseSpawnsProvider]);
+        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
+        //mock.Load();
+        Mock.Load();
     }
 
     [DataRow(".spawn 2", "de_mirage", CsTeam.Terrorist)]
@@ -23,10 +26,11 @@ public class MirageTerroSpawnsTests : BaseSpawnsTest
     [TestMethod]
     public void SpawnCommand_ShouldNotThrow(string spawn, string mapName, CsTeam team)
     {
-        mapResolver = new MapResolver([baseSpawnsProvider]);
-        var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        mock.Load();
-        var result = mock.CommandSpawn(spawn, mapName, team);
+        //mapResolver = new MapResolver([baseSpawnsProvider]);
+        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
+        //mock.Load();
+        Mock.Load();
+        var result = Mock.CommandSpawn(spawn, mapName, team);
 
         var expected = new Vector(1216.00f, -211.00f, -158.60f).ToString();
 
@@ -38,10 +42,11 @@ public class MirageTerroSpawnsTests : BaseSpawnsTest
     [TestMethod]
     public void SpawnCommand_ShouldReturnNull(string spawn, string mapName, CsTeam team)
     {
-        mapResolver = new MapResolver([baseSpawnsProvider]);
-        var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        mock.Load();
-        var result = mock.CommandSpawn(spawn, mapName, team);
+        //mapResolver = new MapResolver([baseSpawnsProvider]);
+        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
+        //mock.Load();
+        Mock.Load();
+        var result = Mock.CommandSpawn(spawn, mapName, team);
 
         Assert.IsNull(result);
     }

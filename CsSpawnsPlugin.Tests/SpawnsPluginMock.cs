@@ -1,10 +1,9 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 
-public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
+public class SpawnsPluginMock(IMapResolver mapResolver)
 {
     public static string ModuleName => "Main";
 
