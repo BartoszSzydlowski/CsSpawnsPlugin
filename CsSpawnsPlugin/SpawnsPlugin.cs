@@ -1,10 +1,11 @@
 ﻿using Autofac;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
-using CsSpawnsPlugin.Services;
 using Microsoft.Extensions.Logging;
 
 namespace CsSpawnsPlugin;
@@ -16,24 +17,13 @@ public class SpawnsPlugin : BasePlugin
     public override string ModuleVersion => "1.0";
 
     private IContainer? container;
-    private ISpawnsService? spawnsService;
-    private IMapResolver? mapResolver;
-    private IBaseSpawnsProvider? baseSpawnsProvider;
-
-    public void SetDependencies(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
-    {
-        spawnsService = new SpawnsService(mapResolver, baseSpawnsProvider);
-    }
+    private readonly IMapResolver? mapResolver;
+    private readonly IBaseSpawnsProvider? baseSpawnsProvider;
 
     public override void Load(bool hotReload)
     {
         var builder = new ContainerBuilder();
-        SetDependencies(mapResolver!, baseSpawnsProvider!);
         container = builder.Build();
-
-        if (spawnsService == null)
-            throw new InvalidOperationException("SpawnsPlugin dependencies are not initialized. Call SetDependencies(...) before Load().");
-
 
         //MapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
@@ -64,6 +54,21 @@ public class SpawnsPlugin : BasePlugin
         if (pawn == null)
             return;
 
-        var mapSpawns = spawnsService!.ResolveMap();
+        var mapSpawns = mapResolver!.Resolve(Server.MapName);
+
+        var team = player.Team;
+
+        var selectedSpawn = Convert.ToInt32(command.GetArg(1));
+
+        Vector? spawn;
+
+        if (team == CsTeam.Terrorist)
+            spawn = mapSpawns.TSpawnCoordinates[selectedSpawn];
+        else if (team == CsTeam.CounterTerrorist)
+            spawn = mapSpawns.CTSpawnCoordinates[selectedSpawn];
+        else
+            return;
+
+        pawn.Teleport(spawn);
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Numerics;
+﻿using CounterStrikeSharp.API.Modules.Utils;
 
 namespace CsSpawnsPlugin.MapProvider;
 public interface IBaseSpawnsProvider
 {
     public string MapName { get; }
 
-    public Dictionary<int, Vector3> TSpawnCoordinates { get; }
+    public Dictionary<int, Vector> TSpawnCoordinates { get; }
 
-    public Dictionary<int, Vector3> CTSpawnCoordinates { get; }
+    public Dictionary<int, Vector> CTSpawnCoordinates { get; }
 }
