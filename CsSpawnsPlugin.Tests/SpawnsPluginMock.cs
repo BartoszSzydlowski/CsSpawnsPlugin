@@ -5,6 +5,11 @@ namespace CsSpawnsPlugin.Tests;
 
 public class SpawnsPluginMock : SpawnsPlugin
 {
+    public SpawnsPluginMock()
+    {
+        MapName = "";
+    }
+
     public SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
     {
         SetDependencies(mapResolver, baseSpawnsProvider);

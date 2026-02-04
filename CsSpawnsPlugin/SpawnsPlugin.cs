@@ -15,7 +15,7 @@ public class SpawnsPlugin : BasePlugin
 
     public override string ModuleVersion => "1.0";
 
-    public string MapName { get; set; } = string.Empty;
+    public string MapName { get; set; } = "";
 
     private IContainer? container;
 
