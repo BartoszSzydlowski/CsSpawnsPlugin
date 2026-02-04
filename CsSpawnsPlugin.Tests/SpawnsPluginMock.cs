@@ -23,8 +23,7 @@ public class SpawnsPluginMock
 
     public void Load()
     {
-        var builder = new ContainerBuilder();
-        container = builder.Build();
+        new ContainerBuilder().Build();
         Console.WriteLine("Plugin loaded successfully!");
         CommandSpawn();
     }

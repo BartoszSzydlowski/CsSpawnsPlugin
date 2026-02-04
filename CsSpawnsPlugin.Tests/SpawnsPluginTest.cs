@@ -7,10 +7,10 @@ namespace CsSpawnsPlugin.Tests;
 public class SpawnsPluginTest : BaseTest
 {
     private IMapResolver? mapResolver;
-    private IBaseSpawnsProvider baseSpawnsProvider = new MirageSpawnsProviderMock();
+    private readonly IBaseSpawnsProvider baseSpawnsProvider = new MirageSpawnsProviderMock();
 
     [TestMethod]
-    public void Load_ShouldNotThrowAnd_MapNameShouldBeDeMirage()
+    public void Load_ShouldNotThrow()
     {
         mapResolver = new MapResolver([baseSpawnsProvider]);
         var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
