@@ -9,7 +9,7 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 	//public abstract IBaseSpawnsProvider BaseSpawnsProvider { get; }
 	protected SpawnsPluginMock Mock { get; set; } = default!;
 
-	private IBaseSpawnsProvider[] providers =
+	private readonly IBaseSpawnsProvider[] providers =
 	[
 		new MirageTerroSpawnsProvider(),
 		new MirageCtSpawnsProvider(),

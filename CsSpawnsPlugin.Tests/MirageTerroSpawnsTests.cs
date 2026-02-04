@@ -6,8 +6,6 @@ namespace CsSpawnsPlugin.Tests;
 [TestClass]
 public class MirageTerroSpawnsTests : BaseSpawnsTest<MirageTerroSpawnsProvider>
 {
-	//public override IMapResolver? MapResolver { get; set; }
-
 	[TestMethod]
 	public void Load_ShouldNotThrow()
 	{
