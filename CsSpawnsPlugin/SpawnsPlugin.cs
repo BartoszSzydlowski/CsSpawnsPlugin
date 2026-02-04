@@ -9,7 +9,7 @@ using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
 
-public class SpawnsPlugin : BasePlugin
+public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider) : BasePlugin
 {
     public override string ModuleName => "Main";
 
@@ -17,8 +17,8 @@ public class SpawnsPlugin : BasePlugin
 
     private string mapName = string.Empty;
 
-    private readonly IMapResolver? mapResolver;
-    private readonly IBaseSpawnsProvider? baseSpawnsProvider;
+    //private readonly IMapResolver? mapResolver;
+    //private readonly IBaseSpawnsProvider? baseSpawnsProvider;
 
     public override void Load(bool hotReload)
     {
@@ -27,6 +27,11 @@ public class SpawnsPlugin : BasePlugin
         mapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
         Logger.LogInformation("Plugin loaded successfully!");
+    }
+
+    public override void OnAllPluginsLoaded(bool hotReload)
+    {
+
     }
 
     private void OnMapEnd()

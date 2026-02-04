@@ -7,6 +7,7 @@ public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMa
     private readonly Dictionary<(string, CsTeam), IBaseSpawnsProvider> spawnsProvdersDic
         = spawnsProviders.ToDictionary(x => (x.MapName, x.Team));
 
+    private readonly IEnumerable<IBaseSpawnsProvider> xd = spawnsProviders;
     //public IBaseSpawnsProvider Resolve(string mapName, CsTeam team)
     //{
     //    return spawnsProvdersDic[(mapName, team)];

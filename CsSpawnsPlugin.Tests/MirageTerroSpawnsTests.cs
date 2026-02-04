@@ -1,54 +1,48 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.MapProvider;
-using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 
 [TestClass]
-public class MirageTerroSpawnsTests : BaseSpawnsTest
+public class MirageTerroSpawnsTests : BaseSpawnsTest<MirageTerroSpawnsProvider>
 {
-    //private IMapResolver? mapResolver;
-    //private readonly IBaseSpawnsProvider baseSpawnsProvider = new MirageTerroSpawnsProvider();
-    public override IMapResolver? MapResolver { get; set; }
-    public override IBaseSpawnsProvider BaseSpawnsProvider => new MirageTerroSpawnsProvider();
+	//public override IMapResolver? MapResolver { get; set; }
 
-    [TestMethod]
-    public void Load_ShouldNotThrow()
-    {
-        //mapResolver = new MapResolver([baseSpawnsProvider]);
-        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        //mock.Load();
-        Mock.Load();
-    }
+	[TestMethod]
+	public void Load_ShouldNotThrow()
+	{
+		Mock.Load();
+	}
 
-    [DataRow(".spawn 2", "de_mirage", CsTeam.Terrorist)]
-    //[DataRow(".spawn 6", "de_mirage", CsTeam.Terrorist)]
-    [TestMethod]
-    public void SpawnCommand_ShouldNotThrow(string spawn, string mapName, CsTeam team)
-    {
-        //mapResolver = new MapResolver([baseSpawnsProvider]);
-        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        //mock.Load();
-        Mock.Load();
-        var result = Mock.CommandSpawn(spawn, mapName, team);
+	[DataRow(".spawn 1", "de_mirage", CsTeam.Terrorist, 1216.00f, -211.00f, -158.60f)]
+	//[DataRow(".spawn 2", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 3", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 4", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 5", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 6", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 7", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 8", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 9", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	//[DataRow(".spawn 10", "de_mirage", CsTeam.Terrorist, 0f, 0f, 0f)]
+	[TestMethod]
+	public void SpawnCommand_ShouldNotThrow(string spawn, string mapName, CsTeam team, float x, float y, float z)
+	{
+		Mock.Load();
+		var result = Mock.CommandSpawn(spawn, mapName, team);
 
-        var expected = new Vector(1216.00f, -211.00f, -158.60f).ToString();
+		var expected = new Vector(x, y, z).ToString();
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(expected, result.ToString());
-    }
+		Assert.IsNotNull(result);
+		Assert.AreEqual(expected, result.ToString());
+	}
 
-    [DataRow(".spawn 22", "de_mirage", CsTeam.Terrorist)]
-    [TestMethod]
-    public void SpawnCommand_ShouldReturnNull(string spawn, string mapName, CsTeam team)
-    {
-        //mapResolver = new MapResolver([baseSpawnsProvider]);
-        //var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
-        //mock.Load();
-        Mock.Load();
-        var result = Mock.CommandSpawn(spawn, mapName, team);
-
-        Assert.IsNull(result);
-    }
+	[DataRow(".spawn 22", "de_mirage", CsTeam.Terrorist)]
+	[TestMethod]
+	public void SpawnCommand_ShouldReturnNull(string spawn, string mapName, CsTeam team)
+	{
+		Mock.Load();
+		var result = Mock.CommandSpawn(spawn, mapName, team);
+		Assert.IsNull(result);
+	}
 }
 
