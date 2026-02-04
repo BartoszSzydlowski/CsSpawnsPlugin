@@ -1,39 +1,24 @@
-﻿using Autofac;
+﻿using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 
-public class SpawnsPluginMock
+public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
 {
-    public string ModuleName => "Main";
+    public static string ModuleName => "Main";
 
-    public string ModuleVersion => "1.0";
-
-    private IContainer? container;
-    private readonly IMapResolver mapResolver;
-    private readonly IBaseSpawnsProvider? baseSpawnsProvider;
-
-    public SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
-    {
-        this.mapResolver = mapResolver;
-        this.baseSpawnsProvider = baseSpawnsProvider;
-        Load();
-    }
+    public static string ModuleVersion => "1.0";
 
     public void Load()
     {
-        new ContainerBuilder().Build();
         Console.WriteLine("Plugin loaded successfully!");
-        CommandSpawn();
     }
 
-    private void CommandSpawn()
+    public Vector CommandSpawn(string command, string mapName, CsTeam team)
     {
-        var mapSpawns = mapResolver!.Resolve("de_mirage");
-        const string args = ".spawn 1";
-        var selectedSpawn = Convert.ToInt32(args.Split(' ')[1]);
-        var spawn = mapSpawns.TSpawnCoordinates[selectedSpawn];
-        Console.WriteLine(spawn);
+        var mapSpawns = mapResolver!.Resolve(mapName, team);
+        var selectedSpawn = Convert.ToInt32(command.Split(' ')[1]);
+        return mapSpawns.SpawnCoordinates[selectedSpawn];
     }
 }

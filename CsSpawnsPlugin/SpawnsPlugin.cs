@@ -1,12 +1,11 @@
-﻿using Autofac;
-using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.Logging;
+using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
 
@@ -16,19 +15,30 @@ public class SpawnsPlugin : BasePlugin
 
     public override string ModuleVersion => "1.0";
 
-    private IContainer? container;
+    private string mapName = string.Empty;
+
     private readonly IMapResolver? mapResolver;
     private readonly IBaseSpawnsProvider? baseSpawnsProvider;
 
     public override void Load(bool hotReload)
     {
-        var builder = new ContainerBuilder();
-        container = builder.Build();
-
-        //MapName = Server.MapName;
+        RegisterListener<OnMapStart>(OnMapStart);
+        RegisterListener<OnMapEnd>(OnMapEnd);
+        mapName = Server.MapName;
         AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
         Logger.LogInformation("Plugin loaded successfully!");
 
+    }
+    private void OnMapEnd()
+    {
+        mapName = Server.MapName;
+        Logger.LogInformation("Map {mapName} ended, plugin unloaded", mapName);
+    }
+
+    private void OnMapStart(string mapName)
+    {
+        Load(true);
+        Logger.LogInformation("Map started: {mapName}", mapName);
     }
 
     [GameEventHandler]
@@ -54,21 +64,18 @@ public class SpawnsPlugin : BasePlugin
         if (pawn == null)
             return;
 
-        var mapSpawns = mapResolver!.Resolve(Server.MapName);
-
         var team = player.Team;
-
+        //var mapSpawns = mapResolver!.Resolve(mapName, team);
         var selectedSpawn = Convert.ToInt32(command.GetArg(1));
+        //if (mapSpawns == null) return;
 
-        Vector? spawn;
+        var spawn = mapResolver?.GetSpawn(mapName, team, selectedSpawn);
 
-        if (team == CsTeam.Terrorist)
-            spawn = mapSpawns.TSpawnCoordinates[selectedSpawn];
-        else if (team == CsTeam.CounterTerrorist)
-            spawn = mapSpawns.CTSpawnCoordinates[selectedSpawn];
-        else
+        if (spawn == null)
+        {
+            Logger.LogInformation("Invalid spawn number {spawn}", spawn);
             return;
-
+        }
         pawn.Teleport(spawn);
     }
 }

@@ -5,7 +5,7 @@ public interface IBaseSpawnsProvider
 {
     public string MapName { get; }
 
-    public Dictionary<int, Vector> TSpawnCoordinates { get; }
+    public CsTeam Team { get; }
 
-    public Dictionary<int, Vector> CTSpawnCoordinates { get; }
+    public Dictionary<int, Vector> SpawnCoordinates { get; }
 }

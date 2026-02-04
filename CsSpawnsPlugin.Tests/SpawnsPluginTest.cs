@@ -1,4 +1,5 @@
-﻿using CsSpawnsPlugin.MapProvider;
+﻿using CounterStrikeSharp.API.Modules.Utils;
+using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
@@ -14,9 +15,26 @@ public class SpawnsPluginTest : BaseTest
     {
         mapResolver = new MapResolver([baseSpawnsProvider]);
         var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
+        mock.Load();
     }
 
-    private class MirageSpawnsProviderMock : MirageSpawnsProvider
+    //[DataRow(".spawn 2", "de_mirage", CsTeam.Terrorist)]
+    [DataRow(".spawn 6", "de_mirage", CsTeam.CounterTerrorist)]
+    [TestMethod]
+    public void SpawnCommand_ShouldNotThrow(string spawn, string mapName, CsTeam team)
+    {
+        mapResolver = new MapResolver([baseSpawnsProvider]);
+        var mock = new SpawnsPluginMock(mapResolver, baseSpawnsProvider);
+        mock.Load();
+        var result = mock.CommandSpawn(spawn, mapName, team);
+
+        var expected = new Vector(1216.00f, -211.00f, -158.60f).ToString();
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(expected, result.ToString());
+    }
+
+    private class MirageSpawnsProviderMock : MirageTerroSpawnsProvider
     {
 
     }
