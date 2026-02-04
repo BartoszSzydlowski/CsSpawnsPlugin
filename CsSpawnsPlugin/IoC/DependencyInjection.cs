@@ -20,5 +20,6 @@ public class DependencyInjection : IPluginServiceCollection<SpawnsPlugin>
     private static void RegisterMapSpawns(IServiceCollection services)
     {
         services.AddScoped<IBaseSpawnsProvider, MirageTerroSpawnsProvider>();
+        services.AddScoped<IBaseSpawnsProvider, MirageCtSpawnsProvider>();
     }
 }

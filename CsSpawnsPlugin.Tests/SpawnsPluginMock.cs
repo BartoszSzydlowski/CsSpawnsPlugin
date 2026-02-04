@@ -15,10 +15,9 @@ public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider base
         Console.WriteLine("Plugin loaded successfully!");
     }
 
-    public Vector CommandSpawn(string command, string mapName, CsTeam team)
+    public Vector? CommandSpawn(string command, string mapName, CsTeam team)
     {
-        var mapSpawns = mapResolver!.Resolve(mapName, team);
         var selectedSpawn = Convert.ToInt32(command.Split(' ')[1]);
-        return mapSpawns.SpawnCoordinates[selectedSpawn];
+        return mapResolver?.GetSpawn(mapName, team, selectedSpawn);
     }
 }

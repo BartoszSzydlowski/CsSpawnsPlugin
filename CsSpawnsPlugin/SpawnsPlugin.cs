@@ -65,9 +65,7 @@ public class SpawnsPlugin : BasePlugin
             return;
 
         var team = player.Team;
-        //var mapSpawns = mapResolver!.Resolve(mapName, team);
         var selectedSpawn = Convert.ToInt32(command.GetArg(1));
-        //if (mapSpawns == null) return;
 
         var spawn = mapResolver?.GetSpawn(mapName, team, selectedSpawn);
 

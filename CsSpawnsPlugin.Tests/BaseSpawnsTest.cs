@@ -1,6 +1,6 @@
 ﻿namespace CsSpawnsPlugin.Tests;
 
-public abstract class BaseTest
+public abstract class BaseSpawnsTest
 {
     [AssemblyInitialize]
     public static void AssemblyInit(TestContext context)
