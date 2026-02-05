@@ -3,14 +3,13 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
 
-public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider) : BasePlugin
+public class SpawnsPlugin(IMapResolver mapResolver) : BasePlugin
 {
 	public override string ModuleName => "Main";
 
@@ -68,7 +67,7 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 
 		var team = player.Team;
 		var selectedSpawn = GetSpawnInserted(player, command);
-		var vector = GetSpawnVector(player, command, team, selectedSpawn);
+		var vector = GetSpawnVector(team, selectedSpawn);
 
 		if (vector == null)
 		{
@@ -80,17 +79,18 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 
 	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
 	{
-		Vector? vector;
+		Dictionary<int, Vector>? dictionary;
 		if (team == CsTeam.Terrorist)
-			vector = GetSpawnCoordinates(selectedSpawn, tSpawnCoordinates);
-		else if (team == CsTeam.Terrorist)
-			vector = GetSpawnCoordinates(selectedSpawn, ctSpawnCoordinates);
+			dictionary = tSpawnCoordinates;
+		else if (team == CsTeam.CounterTerrorist)
+			dictionary = ctSpawnCoordinates;
 		else
-			vector = null;
-		return vector;
+			return null;
+
+		return GetSpawnCoordinates(selectedSpawn, dictionary);
 	}
 
-	private Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
 	{
 		if (!spawns.TryGetValue(selectedSpawn, out var vector))
 			return null;
@@ -101,11 +101,14 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 	private void InitMapSpawns(string mapName)
 	{
 		var mapSpawns = mapResolver.Resolve(mapName);
+		if (mapSpawns == null)
+			return;
+
 		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
 	}
 
-	private int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
+	private static int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
 	{
 		var spawnFromCommand = command.GetArg(1);
 
@@ -118,7 +121,7 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 		return spawnPosition;
 	}
 
-	private bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
+	private static bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
 	{
 		if (command.ArgCount != 2)
 		{

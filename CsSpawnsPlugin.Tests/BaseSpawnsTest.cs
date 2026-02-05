@@ -1,19 +1,19 @@
-﻿using CsSpawnsPlugin.MapProvider;
+﻿using CsSpawnsPlugin.IoC;
+using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CsSpawnsPlugin.Tests;
 
 public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 {
 	private T spawnProvider = default!;
-	private IMapResolver? MapResolver { get; set; }
+	private IMapResolver mapResolver = default!;
 	protected SpawnsPluginMock Mock { get; set; } = default!;
 
-	private readonly IBaseSpawnsProvider[] providers =
-	[
-		new MirageSpawnsProvider(),
-		new MirageCtSpawnsProvider(),
-	];
+	//private IBaseSpawnsProvider[] providers = default!;
+
+	public abstract string MapName { get; }
 
 
 	//[AssemblyInitialize]
@@ -43,42 +43,51 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 	[TestInitialize]
 	public void TestInit()
 	{
-		MapResolver = new MapResolver(providers);
-		Mock = new SpawnsPluginMock(MapResolver, spawnProvider);
+		var services = new ServiceCollection();
+		new DependencyInjection().ConfigureServices(services);
+		var provider = services.BuildServiceProvider();
+		mapResolver = provider.GetRequiredService<IMapResolver>();
+		//providers = [.. provider.GetRequiredService<IEnumerable<IBaseSpawnsProvider>>()];
+		//mapResolver = new MapResolver(providers);
+		Mock = new SpawnsPluginMock(mapResolver)
+		{
+			MapName = MapName
+		};
+		Mock.Load(true);
 	}
 
 	[TestCleanup]
 	public void TestCleanup()
 	{
-		DisposeIfNeeded(Mock);
-		DisposeIfNeeded(MapResolver);
-		DisposeIfNeeded(spawnProvider);
+		//DisposeIfNeeded(Mock);
+		//DisposeIfNeeded(providers);
+		//DisposeIfNeeded(mapResolver);
+		//DisposeIfNeeded(spawnProvider);
 
-		if (providers is not null)
-		{
-			foreach (var p in providers)
-			{
-				DisposeIfNeeded(p);
-			}
-		}
+		//if (providers is not null)
+		//{
+		//	foreach (var p in providers)
+		//	{
+		//		DisposeIfNeeded(p);
+		//	}
+		//}
 
-		Mock = null!;
-		MapResolver = null;
-		spawnProvider = default!;
+		//Mock = null!;
+		//mapResolver = null!;
+		//spawnProvider = default!;
 	}
 
-	private void DisposeIfNeeded(object? obj)
-	{
-		if (obj is IDisposable disposable)
-		{
-			try
-			{
-				disposable.Dispose();
-			}
-			catch
-			{
+	//private void DisposeIfNeeded(object? obj)
+	//{
+	//	if (obj is IDisposable disposable)
+	//	{
+	//		try
+	//		{
+	//			disposable.Dispose();
+	//		}
+	//		catch
+	//		{
 
-			}
-		}
-	}
+	//		}
+	//	}
 }

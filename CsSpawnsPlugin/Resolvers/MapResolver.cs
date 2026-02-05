@@ -15,8 +15,11 @@ public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMa
 		return selectedSpawn;
 	}
 
-	public IBaseSpawnsProvider Resolve(string mapName)
+	public IBaseSpawnsProvider? Resolve(string mapName)
 	{
-		return spawnsProvdersDic[mapName];
+		if (!spawnsProvdersDic.TryGetValue(mapName, out var mapProvider))
+			return null;
+
+		return mapProvider;
 	}
 }

@@ -1,10 +1,9 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 
-public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
+public class SpawnsPluginMock(IMapResolver mapResolver)
 {
 	public static string ModuleName => "Main";
 
@@ -22,9 +21,18 @@ public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider base
 
 	public Vector? CommandSpawn(string command, string mapName, CsTeam team)
 	{
-		//var selectedSpawn = Convert.ToInt32(command.Split(' ')[1]);
-		//return mapResolver?.GetSpawn(mapName, team, selectedSpawn);
-		return null;
+		if (!CheckCommandArgCount(command))
+			return null;
+
+		var selectedSpawn = GetSpawnInserted(command);
+		var vector = GetSpawnVector(team, selectedSpawn);
+
+		if (vector == null)
+		{
+			Console.WriteLine($"Invalid spawn number {selectedSpawn}", selectedSpawn);
+			return null;
+		}
+		return vector;
 	}
 
 	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
@@ -32,7 +40,7 @@ public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider base
 		Vector? vector;
 		if (team == CsTeam.Terrorist)
 			vector = GetSpawnCoordinates(selectedSpawn, tSpawnCoordinates);
-		else if (team == CsTeam.Terrorist)
+		else if (team == CsTeam.CounterTerrorist)
 			vector = GetSpawnCoordinates(selectedSpawn, ctSpawnCoordinates);
 		else
 			vector = null;
@@ -50,6 +58,9 @@ public class SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider base
 	private void InitMapSpawns(string mapName)
 	{
 		var mapSpawns = mapResolver.Resolve(mapName);
+
+		if (mapSpawns == null) return;
+
 		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
 	}
