@@ -4,21 +4,19 @@ using CsSpawnsPlugin.MapProvider;
 namespace CsSpawnsPlugin.Resolvers;
 public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMapResolver
 {
-	private readonly Dictionary<(string, CsTeam), IBaseSpawnsProvider> spawnsProvdersDic
-		= spawnsProviders.ToDictionary(x => (x.MapName, x.Team));
+	private readonly Dictionary<string, IBaseSpawnsProvider> spawnsProvdersDic
+		= spawnsProviders.ToDictionary(x => x.MapName);
 
-	public Vector? GetSpawn(string mapName, CsTeam team, int spawnNumber)
+	public Vector? GetSpawn(int spawnNumber, Dictionary<int, Vector> spawns)
 	{
-		var spawns = spawnsProvdersDic[(mapName, team)];
-
-		if (!spawns.SpawnCoordinates.TryGetValue(spawnNumber, out Vector? selectedSpawn))
+		if (!spawns.TryGetValue(spawnNumber, out Vector? selectedSpawn))
 			return null;
 
 		return selectedSpawn;
 	}
 
-	public IBaseSpawnsProvider Resolve(string mapName, CsTeam team)
+	public IBaseSpawnsProvider Resolve(string mapName)
 	{
-		return spawnsProvdersDic[(mapName, team)];
+		return spawnsProvdersDic[mapName];
 	}
 }

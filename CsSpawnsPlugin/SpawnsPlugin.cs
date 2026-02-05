@@ -17,17 +17,15 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 	public override string ModuleVersion => "1.0";
 
 	private string mapName = string.Empty;
-
-	private Dictionary<int, Vector> SpawnCoordinates = new();
-
-	//private readonly IMapResolver? mapResolver;
-	//private readonly IBaseSpawnsProvider? baseSpawnsProvider;
+	private Dictionary<int, Vector> tSpawnCoordinates = [];
+	private Dictionary<int, Vector> ctSpawnCoordinates = [];
 
 	public override void Load(bool hotReload)
 	{
 		RegisterListener<OnMapStart>(OnMapStart);
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		mapName = Server.MapName;
+		InitMapSpawns(mapName);
 		AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 		Logger.LogInformation("Plugin loaded successfully!");
 	}
@@ -70,22 +68,42 @@ public class SpawnsPlugin(IMapResolver mapResolver, IBaseSpawnsProvider baseSpaw
 
 		var team = player.Team;
 		var selectedSpawn = GetSpawnInserted(player, command);
+		var vector = GetSpawnVector(player, command, team, selectedSpawn);
 
-		var mapSpawns = mapResolver.Resolve(mapName, team);
-
-		SpawnCoordinates = mapSpawns.SpawnCoordinates;
-
-		//var spawn = mapResolver?.GetSpawn(mapName, team, selectedSpawn);
-
-		if (spawn == null)
+		if (vector == null)
 		{
-			Logger.LogInformation("Invalid spawn number {spawn}", spawn);
+			Logger.LogInformation("Invalid spawn number {spawn}", selectedSpawn);
 			return;
 		}
-		pawn.Teleport(spawn);
+		pawn.Teleport(vector);
 	}
 
-	private void InitMap()
+	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
+	{
+		Vector? vector;
+		if (team == CsTeam.Terrorist)
+			vector = GetSpawnCoordinates(selectedSpawn, tSpawnCoordinates);
+		else if (team == CsTeam.Terrorist)
+			vector = GetSpawnCoordinates(selectedSpawn, ctSpawnCoordinates);
+		else
+			vector = null;
+		return vector;
+	}
+
+	private Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	{
+		if (!spawns.TryGetValue(selectedSpawn, out var vector))
+			return null;
+
+		return vector;
+	}
+
+	private void InitMapSpawns(string mapName)
+	{
+		var mapSpawns = mapResolver.Resolve(mapName);
+		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
+		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
+	}
 
 	private int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
 	{

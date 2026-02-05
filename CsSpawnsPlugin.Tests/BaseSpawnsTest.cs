@@ -11,7 +11,7 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 
 	private readonly IBaseSpawnsProvider[] providers =
 	[
-		new MirageTerroSpawnsProvider(),
+		new MirageSpawnsProvider(),
 		new MirageCtSpawnsProvider(),
 	];
 

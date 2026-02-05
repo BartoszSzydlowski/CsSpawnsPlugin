@@ -4,7 +4,7 @@ using CsSpawnsPlugin.MapProvider;
 namespace CsSpawnsPlugin.Tests;
 
 [TestClass]
-public class MirageCtSpawnsTests : BaseSpawnsTest<MirageCtSpawnsProvider>
+public class MirageCtSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
 {
 	[TestMethod]
 	public void Load_ShouldNotThrow()

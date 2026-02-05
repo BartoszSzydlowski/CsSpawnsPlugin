@@ -4,7 +4,7 @@ using CsSpawnsPlugin.MapProvider;
 namespace CsSpawnsPlugin.Resolvers;
 public interface IMapResolver
 {
-	IBaseSpawnsProvider Resolve(string mapName, CsTeam team);
+	IBaseSpawnsProvider Resolve(string mapName);
 
-	Vector? GetSpawn(string mapName, CsTeam team, int spawnNumber);
+	Vector? GetSpawn(int spawnNumber, Dictionary<int, Vector> spawns);
 }
