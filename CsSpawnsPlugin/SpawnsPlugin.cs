@@ -2,22 +2,22 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
+using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
 
-public class SpawnsPlugin(IMapResolver mapResolver) : BasePlugin
+public class SpawnsPlugin(
+	IMapResolver mapResolver,
+	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "Main";
 
 	public override string ModuleVersion => "1.0";
 
 	private string mapName = string.Empty;
-	private Dictionary<int, Vector> tSpawnCoordinates = [];
-	private Dictionary<int, Vector> ctSpawnCoordinates = [];
 
 	public override void Load(bool hotReload)
 	{
@@ -29,15 +29,10 @@ public class SpawnsPlugin(IMapResolver mapResolver) : BasePlugin
 		Logger.LogInformation("Plugin loaded successfully!");
 	}
 
-	public override void OnAllPluginsLoaded(bool hotReload)
-	{
-
-	}
-
 	private void OnMapEnd()
 	{
-		mapName = Server.MapName;
 		Logger.LogInformation("Map {mapName} ended, plugin unloaded", mapName);
+		mapName = string.Empty;
 	}
 
 	private void OnMapStart(string mapName)
@@ -55,47 +50,7 @@ public class SpawnsPlugin(IMapResolver mapResolver) : BasePlugin
 
 	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
 	{
-		if (player?.IsValid != true)
-			return;
-
-		if (!CheckCommandArgCount(player, command))
-			return;
-
-		var pawn = player.PlayerPawn.Value;
-		if (pawn == null)
-			return;
-
-		var team = player.Team;
-		var selectedSpawn = GetSpawnInserted(player, command);
-		var vector = GetSpawnVector(team, selectedSpawn);
-
-		if (vector == null)
-		{
-			Logger.LogInformation("Invalid spawn number {spawn}", selectedSpawn);
-			return;
-		}
-		pawn.Teleport(vector);
-	}
-
-	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
-	{
-		Dictionary<int, Vector>? dictionary;
-		if (team == CsTeam.Terrorist)
-			dictionary = tSpawnCoordinates;
-		else if (team == CsTeam.CounterTerrorist)
-			dictionary = ctSpawnCoordinates;
-		else
-			return null;
-
-		return GetSpawnCoordinates(selectedSpawn, dictionary);
-	}
-
-	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
-	{
-		if (!spawns.TryGetValue(selectedSpawn, out var vector))
-			return null;
-
-		return vector;
+		spawnCommandHandler.Handle(player, command, Logger);
 	}
 
 	private void InitMapSpawns(string mapName)
@@ -104,30 +59,7 @@ public class SpawnsPlugin(IMapResolver mapResolver) : BasePlugin
 		if (mapSpawns == null)
 			return;
 
-		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
-		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
-	}
-
-	private static int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
-	{
-		var spawnFromCommand = command.GetArg(1);
-
-		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
-		{
-			player?.PrintToChat("Usage: .spawn <number>");
-			return 0;
-		}
-
-		return spawnPosition;
-	}
-
-	private static bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
-	{
-		if (command.ArgCount != 2)
-		{
-			player?.PrintToChat("Usage: .spawn <number>");
-			return false;
-		}
-		return true;
+		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
+		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
 	}
 }

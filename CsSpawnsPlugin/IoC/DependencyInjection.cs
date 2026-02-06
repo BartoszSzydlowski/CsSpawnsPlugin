@@ -1,4 +1,5 @@
 ﻿using CounterStrikeSharp.API.Core;
+using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.MapProvider;
 using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ public class DependencyInjection : IPluginServiceCollection<SpawnsPlugin>
 	{
 		RegisterMapResolver(serviceCollection);
 		RegisterMapSpawns(serviceCollection);
+		RegisterHandlers(serviceCollection);
 	}
 
 	private static void RegisterMapResolver(IServiceCollection services)
@@ -20,5 +22,10 @@ public class DependencyInjection : IPluginServiceCollection<SpawnsPlugin>
 	private static void RegisterMapSpawns(IServiceCollection services)
 	{
 		services.AddScoped<IBaseSpawnsProvider, MirageSpawnsProvider>();
+	}
+
+	private static void RegisterHandlers(IServiceCollection services)
+	{
+		services.AddScoped<ISpawnCommandHandler, SpawnCommandHandler>();
 	}
 }

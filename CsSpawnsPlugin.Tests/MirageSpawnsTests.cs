@@ -4,7 +4,7 @@ using CsSpawnsPlugin.MapProvider;
 namespace CsSpawnsPlugin.Tests;
 
 [TestClass]
-public class MirageTerroSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
+public class MirageSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
 {
 	public override string MapName => "de_mirage";
 

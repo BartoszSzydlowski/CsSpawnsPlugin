@@ -1,10 +1,11 @@
 ﻿
 using CounterStrikeSharp.API.Modules.Utils;
+using CsSpawnsPlugin.Consts;
 
 namespace CsSpawnsPlugin.MapProvider;
 public class MirageSpawnsProvider : BaseSpawnsProvider
 {
-	public override string MapName => "de_mirage";
+	public override string MapName => MapNames.Mirage;
 
 	public override Dictionary<int, Vector> TSpawnCoordinates => new()
 	{
