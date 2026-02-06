@@ -1,39 +1,90 @@
-﻿using Autofac;
-using CsSpawnsPlugin.MapProvider;
+﻿using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 
-public class SpawnsPluginMock
+public class SpawnsPluginMock(IMapResolver mapResolver)
 {
-    public string ModuleName => "Main";
+	public static string ModuleName => "Main";
 
-    public string ModuleVersion => "1.0";
+	public static string ModuleVersion => "1.0";
 
-    private IContainer? container;
-    private readonly IMapResolver mapResolver;
-    private readonly IBaseSpawnsProvider? baseSpawnsProvider;
+	public string MapName { get; set; } = string.Empty;
+	private Dictionary<int, Vector> tSpawnCoordinates = [];
+	private Dictionary<int, Vector> ctSpawnCoordinates = [];
 
-    public SpawnsPluginMock(IMapResolver mapResolver, IBaseSpawnsProvider baseSpawnsProvider)
-    {
-        this.mapResolver = mapResolver;
-        this.baseSpawnsProvider = baseSpawnsProvider;
-        Load();
-    }
+	public void Load(bool hotReload)
+	{
+		InitMapSpawns(MapName);
+		Console.WriteLine("Plugin loaded successfully!");
+	}
 
-    public void Load()
-    {
-        new ContainerBuilder().Build();
-        Console.WriteLine("Plugin loaded successfully!");
-        CommandSpawn();
-    }
+	public Vector? CommandSpawn(string command, string mapName, CsTeam team)
+	{
+		if (!CheckCommandArgCount(command))
+			return null;
 
-    private void CommandSpawn()
-    {
-        var mapSpawns = mapResolver!.Resolve("de_mirage");
-        const string args = ".spawn 1";
-        var selectedSpawn = Convert.ToInt32(args.Split(' ')[1]);
-        var spawn = mapSpawns.TSpawnCoordinates[selectedSpawn];
-        Console.WriteLine(spawn);
-    }
+		var selectedSpawn = GetSpawnInserted(command);
+		var vector = GetSpawnVector(team, selectedSpawn);
+
+		if (vector == null)
+		{
+			Console.WriteLine($"Invalid spawn number {selectedSpawn}", selectedSpawn);
+			return null;
+		}
+		return vector;
+	}
+
+	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
+	{
+		Vector? vector;
+		if (team == CsTeam.Terrorist)
+			vector = GetSpawnCoordinates(selectedSpawn, tSpawnCoordinates);
+		else if (team == CsTeam.CounterTerrorist)
+			vector = GetSpawnCoordinates(selectedSpawn, ctSpawnCoordinates);
+		else
+			vector = null;
+		return vector;
+	}
+
+	private Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	{
+		if (!spawns.TryGetValue(selectedSpawn, out var vector))
+			return null;
+
+		return vector;
+	}
+
+	private void InitMapSpawns(string mapName)
+	{
+		var mapSpawns = mapResolver.Resolve(mapName);
+
+		if (mapSpawns == null) return;
+
+		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
+		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
+	}
+
+	private int GetSpawnInserted(string command)
+	{
+		var spawnFromCommand = command.Split(' ')[1];
+
+		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
+		{
+			Console.WriteLine("Usage: .spawn <number>");
+			return 0;
+		}
+
+		return spawnPosition;
+	}
+
+	private bool CheckCommandArgCount(string command)
+	{
+		if (command.Split(' ').Length != 2)
+		{
+			Console.WriteLine("Usage: .spawn <number>");
+			return false;
+		}
+		return true;
+	}
 }
