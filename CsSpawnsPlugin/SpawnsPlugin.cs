@@ -24,11 +24,7 @@ public class SpawnsPlugin(
 	{
 		try
 		{
-			RegisterListener<OnMapStart>((mapName) =>
-			{
-				this.mapName = mapName;
-				Logger.LogInformation("Map started: {mapName}", mapName);
-			});
+			RegisterListener<OnMapStart>(OnMapStart);
 			RegisterListener<OnMapEnd>(OnMapEnd);
 			InitMapSpawns(mapName);
 			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
@@ -44,6 +40,12 @@ public class SpawnsPlugin(
 	{
 		Logger.LogInformation("Map {mapName} ended, plugin unloaded", mapName);
 		mapName = string.Empty;
+	}
+
+	private void OnMapStart(string mapName)
+	{
+		this.mapName = mapName;
+		Logger.LogInformation("Map started: {mapName}", mapName);
 	}
 
 	[GameEventHandler]
