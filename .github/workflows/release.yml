@@ -35,13 +35,11 @@ jobs:
             --configuration Release \
             --no-restore
 
-      - name: Publish DLL
+      - name: Collect DLL
         run: |
-          dotnet publish CsSpawnsPlugin/CsSpawnsPlugin.csproj \
-            --configuration Release \
-            --framework net8.0 \
-            --no-restore \
-            --output ./publish
+          mkdir artifact
+          cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.dll artifact/
+          cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.pdb artifact/ || true
 
       - name: Zip release artifact
         run: |
