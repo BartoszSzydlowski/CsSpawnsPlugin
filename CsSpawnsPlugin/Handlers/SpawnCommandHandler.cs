@@ -30,7 +30,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		pawn.Teleport(vector);
 	}
 
-	private bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
+	private static bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
 	{
 		if (command.ArgCount != 2)
 		{
@@ -40,7 +40,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return true;
 	}
 
-	private int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
+	private static int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
 	{
 		var spawnFromCommand = command.GetArg(1);
 		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
@@ -51,7 +51,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return spawnPosition;
 	}
 
-	private Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
 	{
 		if (!spawns.TryGetValue(selectedSpawn, out var vector)) return null;
 		return vector;

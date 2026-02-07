@@ -14,9 +14,11 @@ public class SpawnsPlugin(
 {
 	public override string ModuleName => "SpawnsPlugin";
 
-	public override string ModuleVersion => "1.0";
+	public override string ModuleVersion => "0.0.10-beta";
 
 	private string mapName = string.Empty;
+
+	private CCSPlayerController player = null!;
 
 	public override void Load(bool hotReload)
 	{
@@ -34,7 +36,7 @@ public class SpawnsPlugin(
 		}
 		catch (Exception ex)
 		{
-			Logger.LogError(ex, ex.Message);
+			Logger.LogError(ex, "An exception occurred: {Message}", ex.Message);
 		}
 	}
 
@@ -45,9 +47,13 @@ public class SpawnsPlugin(
 	}
 
 	[GameEventHandler]
-	public HookResult OnPlayerConnect(EventPlayerConnect @event, GameEventInfo info)
+	public HookResult OnPlayerConnect(EventPlayerConnect @event)
 	{
-		Logger.LogInformation("Player {Name} has connected!", @event.Userid?.PlayerName);
+		if (@event.Userid?.IsValid == true)
+		{
+			player = @event.Userid;
+			Logger.LogInformation("Player {Name} has connected!", player);
+		}
 		return HookResult.Continue;
 	}
 
