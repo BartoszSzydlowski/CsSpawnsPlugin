@@ -26,10 +26,11 @@ public class SpawnsPlugin(
 		{
 			RegisterListener<OnMapStart>(OnMapStart);
 			RegisterListener<OnMapEnd>(OnMapEnd);
-			RegisterListener<OnClientConnected>(OnClientConnected);
+			//RegisterListener<OnClientConnected>(OnClientConnected);
 			RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
+			//RegisterEventHandler<EventPlayerChat>(CommandSpawn)
 			InitMapSpawns(mapName);
-			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
+			AddCommand("say .spawn", "Teleport to a spawn", CommandSpawn);
 			Logger.LogInformation("Plugin loaded successfully!");
 		}
 		catch (Exception ex)
@@ -71,14 +72,14 @@ public class SpawnsPlugin(
 	//	return HookResult.Continue;
 	//}
 
-	public void OnClientConnected(int playerSlot)
-	{
-		Logger.LogInformation("Player {Name} has connected!", player);
-	}
+	//public void OnClientConnected(int playerSlot)
+	//{
+	//	Logger.LogInformation("Player {Name} has connected!", player);
+	//}
 
 	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
 	{
-		spawnCommandHandler.Handle(player, command, Logger);
+		spawnCommandHandler.Handle(this.player, command, Logger);
 	}
 
 	private void InitMapSpawns(string mapName)
