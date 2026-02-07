@@ -1,0 +1,55 @@
+name: Build & Release (.NET 8)
+
+env:
+    PROJECT_NAME: CsSpawnsPlugin
+    CONFIGURATION: Release
+    DOTNET_VERSION: 8.0.x
+    PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore $PATH
+
+      - name: Build (Release)
+        run: |
+          dotnet build $PATH \
+            --configuration Release \
+            --no-restore
+
+      - name: Publish DLL
+        run: |
+          dotnet publish $PATH \
+            --configuration Release \
+            --framework net8.0 \
+            --no-restore \
+            --output ./publish
+
+      - name: Zip release artifact
+        run: |
+          cd publish
+          zip -r MyLibrary-${{ github.ref_name }}.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: publish/$PROJECT_NAME-${{ github.ref_name }}.zip
