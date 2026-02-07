@@ -4,12 +4,13 @@ env:
     PROJECT_NAME: CsSpawnsPlugin
     CONFIGURATION: Release
     DOTNET_VERSION: 8.0.x
-    PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+    PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
 
 on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,17 +29,17 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore $PATH
+        run: dotnet restore $PROJECT_PATH
 
       - name: Build (Release)
         run: |
-          dotnet build $PATH \
+          dotnet build $PROJECT_PATH \
             --configuration Release \
             --no-restore
 
       - name: Publish DLL
         run: |
-          dotnet publish $PATH \
+          dotnet publish $PROJECT_PATH \
             --configuration Release \
             --framework net8.0 \
             --no-restore \
