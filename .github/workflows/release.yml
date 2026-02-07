@@ -43,10 +43,10 @@ jobs:
 
       - name: Zip release artifact
         run: |
-          cd publish
+          cd artifact
           zip -r ../CsSpawnsPlugin-${{ github.ref_name }}.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: publish/CsSpawnsPlugin-${{ github.ref_name }}.zip
+          files: CsSpawnsPlugin-${{ github.ref_name }}.zip
