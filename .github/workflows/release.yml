@@ -1,10 +1,8 @@
 name: Build & Release (.NET 8)
 
 env:
-    PROJECT_NAME: CsSpawnsPlugin
     CONFIGURATION: Release
     DOTNET_VERSION: 8.0.x
-    PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
 
 on:
   push:
@@ -29,17 +27,17 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore $PROJECT_PATH
+        run: dotnet restore $CsSpawnsPlugin/CsSpawnsPlugin.csproj
 
       - name: Build (Release)
         run: |
-          dotnet build $PROJECT_PATH \
+          dotnet build $CsSpawnsPlugin/CsSpawnsPlugin.csproj \
             --configuration Release \
             --no-restore
 
       - name: Publish DLL
         run: |
-          dotnet publish $PROJECT_PATH \
+          dotnet publish $CsSpawnsPlugin/CsSpawnsPlugin.csproj \
             --configuration Release \
             --framework net8.0 \
             --no-restore \
@@ -48,9 +46,9 @@ jobs:
       - name: Zip release artifact
         run: |
           cd publish
-          zip -r publish/$PROJECT_NAME-${{ github.ref_name }}.zip .
+          zip -r publish/CsSpawnsPlugin-${{ github.ref_name }}.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: publish/$PROJECT_NAME-${{ github.ref_name }}.zip
+          files: publish/CsSpawnsPlugin-${{ github.ref_name }}.zip
