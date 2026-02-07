@@ -30,7 +30,7 @@ public class SpawnsPlugin(
 			RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
 			//RegisterEventHandler<EventPlayerChat>(CommandSpawn)
 			InitMapSpawns(mapName);
-			AddCommand("say .spawn", "Teleport to a spawn", CommandSpawn);
+			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 			Logger.LogInformation("Plugin loaded successfully!");
 		}
 		catch (Exception ex)
@@ -41,6 +41,7 @@ public class SpawnsPlugin(
 
 	private HookResult EventPlayerConnectMethod(EventPlayerConnect @event, GameEventInfo info)
 	{
+		Logger.LogInformation("Player {Name} has connected! (outside if)", @event.Userid?.PlayerName ?? "dalej null");
 		if (@event.Userid?.IsValid == true)
 		{
 			player = @event.Userid;
@@ -79,6 +80,7 @@ public class SpawnsPlugin(
 
 	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
 	{
+		Logger.LogInformation("{playerName}", this.player.PlayerName);
 		spawnCommandHandler.Handle(this.player, command, Logger);
 	}
 
