@@ -1,5 +1,4 @@
-﻿using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
 using CsSpawnsPlugin.Handlers;
@@ -13,7 +12,7 @@ public class SpawnsPlugin(
 	IMapResolver mapResolver,
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
-	public override string ModuleName => "Main";
+	public override string ModuleName => "SpawnsPlugin";
 
 	public override string ModuleVersion => "1.0";
 
@@ -21,24 +20,28 @@ public class SpawnsPlugin(
 
 	public override void Load(bool hotReload)
 	{
-		RegisterListener<OnMapStart>(OnMapStart);
-		RegisterListener<OnMapEnd>(OnMapEnd);
-		mapName = Server.MapName;
-		InitMapSpawns(mapName);
-		AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
-		Logger.LogInformation("Plugin loaded successfully!");
+		try
+		{
+			RegisterListener<OnMapStart>((mapName) =>
+			{
+				this.mapName = mapName;
+				Logger.LogInformation("Map started: {mapName}", mapName);
+			});
+			RegisterListener<OnMapEnd>(OnMapEnd);
+			InitMapSpawns(mapName);
+			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
+			Logger.LogInformation("Plugin loaded successfully!");
+		}
+		catch (Exception ex)
+		{
+			Logger.LogError(ex, ex.Message);
+		}
 	}
 
 	private void OnMapEnd()
 	{
 		Logger.LogInformation("Map {mapName} ended, plugin unloaded", mapName);
 		mapName = string.Empty;
-	}
-
-	private void OnMapStart(string mapName)
-	{
-		Load(true);
-		Logger.LogInformation("Map started: {mapName}", mapName);
 	}
 
 	[GameEventHandler]
@@ -57,7 +60,10 @@ public class SpawnsPlugin(
 	{
 		var mapSpawns = mapResolver.Resolve(mapName);
 		if (mapSpawns == null)
+		{
+			Logger.LogInformation("Map {mapName} not found", mapName);
 			return;
+		}
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
