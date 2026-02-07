@@ -27,17 +27,17 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore $CsSpawnsPlugin/CsSpawnsPlugin.csproj
+        run: dotnet restore CsSpawnsPlugin/CsSpawnsPlugin.csproj
 
       - name: Build (Release)
         run: |
-          dotnet build $CsSpawnsPlugin/CsSpawnsPlugin.csproj \
+          dotnet build CsSpawnsPlugin/CsSpawnsPlugin.csproj \
             --configuration Release \
             --no-restore
 
       - name: Publish DLL
         run: |
-          dotnet publish $CsSpawnsPlugin/CsSpawnsPlugin.csproj \
+          dotnet publish CsSpawnsPlugin/CsSpawnsPlugin.csproj \
             --configuration Release \
             --framework net8.0 \
             --no-restore \
