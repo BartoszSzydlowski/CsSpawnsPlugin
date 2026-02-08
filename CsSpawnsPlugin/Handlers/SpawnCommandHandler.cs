@@ -17,13 +17,10 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 
 		if (!CheckCommandArgCount(player, command)) return;
 
-		var pawn = player.PlayerPawn.Value;
-		if (pawn == null) return;
-
-		//var spawnId = Convert.ToInt32(command[1]);
-		var team = player.Team;
 		var selectedSpawn = GetSpawnInserted(player, command);
-		var vector = GetSpawnVector(team, selectedSpawn);
+		if (selectedSpawn == 0) return;
+
+		var vector = GetSpawnVector(player.Team, selectedSpawn);
 
 		if (vector == null)
 		{
@@ -33,14 +30,14 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 				$"CT: {CTSpawnCoordinates.Keys.ToArray()[0]}-{CTSpawnCoordinates.Keys.ToArray()[CTSpawnCoordinates.Keys.Last()]}");
 			return;
 		}
-		pawn.Teleport(vector);
+		player.PlayerPawn.Value?.Teleport(vector);
 	}
 
 	private static bool CheckCommandArgCount(CCSPlayerController? player, string[] command)
 	{
 		if (command.Length != 2)
 		{
-			player?.PrintToChat("Too much arguments specified. Usage: '.spawn <number>'");
+			player?.PrintToChat("Wrong number of arguments specified. Usage: '.spawn <number>'");
 			return false;
 		}
 		return true;
@@ -48,8 +45,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 
 	private static int GetSpawnInserted(CCSPlayerController? player, string[] command)
 	{
-		var spawnFromCommand = command[1];
-		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
+		if (!int.TryParse(command[1], out int spawnPosition))
 		{
 			player?.PrintToChat("A number was not provided. Usage: '.spawn <number>'");
 			return 0;
@@ -57,8 +53,11 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return spawnPosition;
 	}
 
-	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns) =>
-		!spawns.TryGetValue(selectedSpawn, out var vector) ? null : vector;
+	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	{
+		if (!spawns.TryGetValue(selectedSpawn, out var vector)) return null;
+		return vector;
+	}
 
 	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
 	{
