@@ -22,7 +22,7 @@ public class SpawnsPlugin(
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		RegisterEventHandler<EventPlayerChat>(OnPlayerChat);
-		AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
+		//AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 	}
 
 	private HookResult OnPlayerChat(EventPlayerChat @event, GameEventInfo info)
