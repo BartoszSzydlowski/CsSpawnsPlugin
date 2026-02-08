@@ -67,7 +67,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		else if (team == CsTeam.CounterTerrorist) dictionary = CTSpawnCoordinates;
 		else return null;
 
-		logger.LogInformation("Returned spawns: {spawns}", (object?)dictionary ?? "none");
+		logger.LogInformation("Returned spawns: {spawns}", dictionary.ToString() ?? "none");
 
 		return GetSpawnCoordinates(selectedSpawn, dictionary);
 	}
