@@ -1,5 +1,4 @@
 ﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -10,5 +9,5 @@ public interface ISpawnCommandHandler
 	Dictionary<int, Vector> CTSpawnCoordinates { get; set; }
 	string MapName { get; set; }
 
-	void Handle(CCSPlayerController? player, CommandInfo command, ILogger logger);
+	void Handle(CCSPlayerController? player, string text, ILogger logger);
 }

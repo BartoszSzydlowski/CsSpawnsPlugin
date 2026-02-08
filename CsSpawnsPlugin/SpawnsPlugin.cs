@@ -1,5 +1,6 @@
-﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Commands;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Events;
 using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
 using static CounterStrikeSharp.API.Core.Listeners;
@@ -20,40 +21,41 @@ public class SpawnsPlugin(
 		RegisterListener<OnMapStart>(OnMapStart);
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
-		//RegisterEventHandler<EventPlayerChat>(OnPlayerChatMethod);
+		RegisterEventHandler<EventPlayerChat>(OnPlayerChat);
 		AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 	}
 
-	//private HookResult OnPlayerChatMethod(EventPlayerChat @event, GameEventInfo info)
-	//{
-	//	var player = @event.Userid;
-	//	if (player == 0)
-	//		return HookResult.Continue;
+	private HookResult OnPlayerChat(EventPlayerChat @event, GameEventInfo info)
+	{
+		var player = Utilities.GetPlayerFromUserid(@event.Userid);
+		if (player == null || !player.IsValid)
+			return HookResult.Continue;
 
-	//	string message = @event.Text?.Trim() ?? "";
+		string message = @event.Text?.Trim() ?? "";
 
-	//	// Example: ".spawn 2"
-	//	if (!message.StartsWith(".spawn", StringComparison.OrdinalIgnoreCase))
-	//		return HookResult.Continue;
+		// Example: ".spawn 2"
+		if (!message.StartsWith(".spawn", StringComparison.OrdinalIgnoreCase))
+			return HookResult.Continue;
 
-	//	var args = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+		//var args = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-	//	if (args.Length < 2)
-	//	{
-	//		player.PrintToChat("Usage: .spawn <number>");
-	//		return HookResult.Handled;
-	//	}
+		//if (args.Length < 2)
+		//{
+		//	player.PrintToChat("Usage: .spawn <number>");
+		//	return HookResult.Handled;
+		//}
 
-	//	if (!int.TryParse(args[1], out int spawnId))
-	//	{
-	//		player.PrintToChat("Invalid spawn number.");
-	//		return HookResult.Handled;
-	//	}
-	//	HandleSpawn(player, spawnId);
+		//if (!int.TryParse(args[1], out int spawnId))
+		//{
+		//	player.PrintToChat("Invalid spawn number.");
+		//	return HookResult.Handled;
+		//}
+		//HandleSpawn(player, spawnId);
 
-	//	// Prevent the message from showing in chat (optional)
-	//	return HookResult.Handled;
-	//}
+		spawnCommandHandler.Handle(player, message, Logger);
+		// Prevent the message from showing in chat (optional)
+		return HookResult.Handled;
+	}
 
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info) =>
 		(@event.Userid?.IsValid != true) ? HookResult.Continue : HookResult.Continue;
@@ -66,11 +68,11 @@ public class SpawnsPlugin(
 		InitMapSpawns(this.mapName);
 	}
 
-	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
-	{
-		if (player?.IsValid != true) return;
-		spawnCommandHandler.Handle(player, command, Logger);
-	}
+	//private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
+	//{
+	//	if (player?.IsValid != true) return;
+	//	spawnCommandHandler.Handle(player, command, Logger);
+	//}
 
 	private void InitMapSpawns(string mapName)
 	{

@@ -1,5 +1,4 @@
 ﻿using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -10,15 +9,18 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 	public Dictionary<int, Vector> CTSpawnCoordinates { get; set; } = [];
 	public string MapName { get; set; } = string.Empty;
 
-	public void Handle(CCSPlayerController? player, CommandInfo command, ILogger logger)
+	public void Handle(CCSPlayerController? player, string text, ILogger logger)
 	{
 		if (player?.IsValid != true) return;
+
+		var command = text.Split(' ');
 
 		if (!CheckCommandArgCount(player, command)) return;
 
 		var pawn = player.PlayerPawn.Value;
 		if (pawn == null) return;
 
+		//var spawnId = Convert.ToInt32(command[1]);
 		var team = player.Team;
 		var selectedSpawn = GetSpawnInserted(player, command);
 		var vector = GetSpawnVector(team, selectedSpawn);
@@ -34,9 +36,9 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		pawn.Teleport(vector);
 	}
 
-	private static bool CheckCommandArgCount(CCSPlayerController? player, CommandInfo command)
+	private static bool CheckCommandArgCount(CCSPlayerController? player, string[] command)
 	{
-		if (command.ArgCount != 2)
+		if (command.Length != 2)
 		{
 			player?.PrintToChat("Too much arguments specified. Usage: '.spawn <number>'");
 			return false;
@@ -44,9 +46,9 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return true;
 	}
 
-	private static int GetSpawnInserted(CCSPlayerController? player, CommandInfo command)
+	private static int GetSpawnInserted(CCSPlayerController? player, string[] command)
 	{
-		var spawnFromCommand = command.GetArg(1);
+		var spawnFromCommand = command[1];
 		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
 		{
 			player?.PrintToChat("A number was not provided. Usage: '.spawn <number>'");
