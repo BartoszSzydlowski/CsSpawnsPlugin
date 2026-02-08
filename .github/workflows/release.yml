@@ -38,7 +38,11 @@ jobs:
 
       - name: Collect DLL
         run: |
-          mkdir artifact
+          mkdir -p artifact
+          mkdir -p artifact/addons
+          mkdir -p artifact/addons/counterstrikesharp
+          mkdir -p artifact/addons/counterstrikesharp/plugins
+          mkdir -p artifact/addons/counterstrikesharp/plugins/CsSpawnsPlugin
           cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.dll \
             artifact/addons/counterstrikesharp/plugins/CsSpawnsPlugin/
           cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.pdb \
