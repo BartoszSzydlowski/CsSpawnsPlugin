@@ -18,8 +18,6 @@ public class SpawnsPlugin(
 
 	private string mapName = string.Empty;
 
-	private CCSPlayerController player = null!;
-
 	public override void Load(bool hotReload)
 	{
 		try
@@ -27,8 +25,9 @@ public class SpawnsPlugin(
 			RegisterListener<OnMapStart>(OnMapStart);
 			RegisterListener<OnMapEnd>(OnMapEnd);
 			//RegisterListener<OnClientConnected>(OnClientConnected);
-			RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
+			//RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
 			//RegisterEventHandler<EventPlayerChat>(CommandSpawn)
+			RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 			InitMapSpawns(mapName);
 			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 			Logger.LogInformation("Plugin loaded successfully!");
@@ -39,16 +38,27 @@ public class SpawnsPlugin(
 		}
 	}
 
-	private HookResult EventPlayerConnectMethod(EventPlayerConnect @event, GameEventInfo info)
+	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info)
 	{
-		Logger.LogInformation("Player {Name} has connected! (outside if)", @event.Userid?.PlayerName ?? "dalej null");
-		if (@event.Userid?.IsValid == true)
-		{
-			player = @event.Userid;
-			Logger.LogInformation("Player {Name} has connected!", player);
-		}
+		var player = @event.Userid;
+
+		if (player?.IsValid != true)
+			return HookResult.Continue;
+
+		Logger.LogInformation("Player {Name} has spawned", player.PlayerName);
 		return HookResult.Continue;
 	}
+
+	//private HookResult EventPlayerConnectMethod(EventPlayerConnect @event, GameEventInfo info)
+	//{
+	//	Logger.LogInformation("Player {Name} has connected! (outside if)", @event.Userid?.PlayerName ?? "dalej null");
+	//	if (@event.Userid?.IsValid == true)
+	//	{
+	//		//player = @event.Userid;
+	//		Logger.LogInformation("Player {Name} has connected!", @event.Userid);
+	//	}
+	//	return HookResult.Continue;
+	//}
 
 	private void OnMapEnd()
 	{
@@ -80,8 +90,14 @@ public class SpawnsPlugin(
 
 	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
 	{
-		Logger.LogInformation("{playerName}", this.player.PlayerName);
-		spawnCommandHandler.Handle(this.player, command, Logger);
+		if (player?.IsValid != true)
+		{
+			Logger.LogWarning("CommandSpawn called with null player");
+			return;
+		}
+
+		Logger.LogInformation("{playerName}", player?.PlayerName);
+		spawnCommandHandler.Handle(player, command, Logger);
 	}
 
 	private void InitMapSpawns(string mapName)
