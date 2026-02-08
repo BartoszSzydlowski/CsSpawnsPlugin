@@ -11,10 +11,8 @@ public class SpawnsPlugin(
 	IMapResolver mapResolver,
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
-
 	public override string ModuleName => "SpawnsPlugin";
-
-	public override string ModuleVersion => "0.0.10-beta";
+	public override string ModuleVersion => "0.0.15-beta";
 
 	private string mapName = string.Empty;
 
@@ -24,11 +22,7 @@ public class SpawnsPlugin(
 		{
 			RegisterListener<OnMapStart>(OnMapStart);
 			RegisterListener<OnMapEnd>(OnMapEnd);
-			//RegisterListener<OnClientConnected>(OnClientConnected);
-			//RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
-			//RegisterEventHandler<EventPlayerChat>(CommandSpawn)
 			RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
-			//InitMapSpawns(mapName);
 			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 			Logger.LogInformation("Plugin loaded successfully!");
 		}
@@ -49,17 +43,6 @@ public class SpawnsPlugin(
 		return HookResult.Continue;
 	}
 
-	//private HookResult EventPlayerConnectMethod(EventPlayerConnect @event, GameEventInfo info)
-	//{
-	//	Logger.LogInformation("Player {Name} has connected! (outside if)", @event.Userid?.PlayerName ?? "dalej null");
-	//	if (@event.Userid?.IsValid == true)
-	//	{
-	//		//player = @event.Userid;
-	//		Logger.LogInformation("Player {Name} has connected!", @event.Userid);
-	//	}
-	//	return HookResult.Continue;
-	//}
-
 	private void OnMapEnd()
 	{
 		Logger.LogInformation("Map {mapName} ended, plugin unloaded", mapName);
@@ -72,22 +55,6 @@ public class SpawnsPlugin(
 		InitMapSpawns(this.mapName);
 		Logger.LogInformation("Map started: {mapName}", mapName);
 	}
-
-	//[GameEventHandler]
-	//public HookResult OnPlayerConnect(EventPlayerConnect @event)
-	//{
-	//	if (@event.Userid?.IsValid == true)
-	//	{
-	//		player = @event.Userid;
-	//		Logger.LogInformation("Player {Name} has connected!", player);
-	//	}
-	//	return HookResult.Continue;
-	//}
-
-	//public void OnClientConnected(int playerSlot)
-	//{
-	//	Logger.LogInformation("Player {Name} has connected!", player);
-	//}
 
 	private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
 	{
