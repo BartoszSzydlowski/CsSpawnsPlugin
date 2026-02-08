@@ -58,7 +58,6 @@ public class SpawnsPlugin(
 		var mapSpawns = mapResolver.Resolve(mapName);
 		if (mapSpawns == null) return;
 
-
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
 		spawnCommandHandler.MapName = this.mapName;
