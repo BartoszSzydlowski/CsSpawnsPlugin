@@ -7,19 +7,9 @@ public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMa
 	private readonly Dictionary<string, IBaseSpawnsProvider> spawnsProvdersDic
 		= spawnsProviders.ToDictionary(x => x.MapName);
 
-	public Vector? GetSpawn(int spawnNumber, Dictionary<int, Vector> spawns)
-	{
-		if (!spawns.TryGetValue(spawnNumber, out Vector? selectedSpawn))
-			return null;
+	public Vector? GetSpawn(int spawnNumber, Dictionary<int, Vector> spawns) =>
+		!spawns.TryGetValue(spawnNumber, out var selectedSpawn) ? null : selectedSpawn;
 
-		return selectedSpawn;
-	}
-
-	public IBaseSpawnsProvider? Resolve(string mapName)
-	{
-		if (!spawnsProvdersDic.TryGetValue(mapName, out var mapProvider))
-			return null;
-
-		return mapProvider;
-	}
+	public IBaseSpawnsProvider? Resolve(string mapName) =>
+		!spawnsProvdersDic.TryGetValue(mapName, out var mapProvider) ? null : mapProvider;
 }

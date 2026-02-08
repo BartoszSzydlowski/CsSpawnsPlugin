@@ -55,11 +55,8 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return spawnPosition;
 	}
 
-	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
-	{
-		if (!spawns.TryGetValue(selectedSpawn, out var vector)) return null;
-		return vector;
-	}
+	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns) =>
+		!spawns.TryGetValue(selectedSpawn, out var vector) ? null : vector;
 
 	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
 	{
