@@ -47,7 +47,7 @@ public class SpawnsPluginMock(IMapResolver mapResolver)
 		return vector;
 	}
 
-	private Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
+	private static Vector? GetSpawnCoordinates(int selectedSpawn, Dictionary<int, Vector> spawns)
 	{
 		if (!spawns.TryGetValue(selectedSpawn, out var vector))
 			return null;

@@ -11,6 +11,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 
 	public void Handle(CCSPlayerController? player, CommandInfo command, ILogger logger)
 	{
+		logger.LogInformation("Spawn counts — T: {TCount}, CT: {CTCount}", TSpawnCoordinates.Count, CTSpawnCoordinates.Count);
 		if (player?.IsValid != true) return;
 
 		if (!CheckCommandArgCount(player, command)) return;
@@ -19,8 +20,9 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		if (pawn == null) return;
 
 		var team = player.Team;
+		logger.LogInformation("Player team: {playerTeam}", player.Team);
 		var selectedSpawn = GetSpawnInserted(player, command);
-		var vector = GetSpawnVector(team, selectedSpawn);
+		var vector = GetSpawnVector(team, selectedSpawn, logger);
 
 		if (vector == null)
 		{
@@ -57,13 +59,15 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return vector;
 	}
 
-	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
+	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn, ILogger logger)
 	{
 		Dictionary<int, Vector>? dictionary;
 
 		if (team == CsTeam.Terrorist) dictionary = TSpawnCoordinates;
 		else if (team == CsTeam.CounterTerrorist) dictionary = CTSpawnCoordinates;
 		else return null;
+
+		logger.LogInformation("Returned spawns: {spawns}", (object?)dictionary ?? "none");
 
 		return GetSpawnCoordinates(selectedSpawn, dictionary);
 	}

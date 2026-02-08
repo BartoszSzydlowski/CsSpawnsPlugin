@@ -28,7 +28,7 @@ public class SpawnsPlugin(
 			//RegisterEventHandler<EventPlayerConnect>(EventPlayerConnectMethod);
 			//RegisterEventHandler<EventPlayerChat>(CommandSpawn)
 			RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
-			InitMapSpawns(mapName);
+			//InitMapSpawns(mapName);
 			AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 			Logger.LogInformation("Plugin loaded successfully!");
 		}
@@ -69,6 +69,7 @@ public class SpawnsPlugin(
 	private void OnMapStart(string mapName)
 	{
 		this.mapName = mapName;
+		InitMapSpawns(this.mapName);
 		Logger.LogInformation("Map started: {mapName}", mapName);
 	}
 
