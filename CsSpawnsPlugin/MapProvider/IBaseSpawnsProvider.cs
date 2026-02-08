@@ -3,7 +3,7 @@
 namespace CsSpawnsPlugin.MapProvider;
 public interface IBaseSpawnsProvider
 {
-	public string MapName { get; }
-	public Dictionary<int, Vector> CTSpawnCoordinates { get; }
-	public Dictionary<int, Vector> TSpawnCoordinates { get; }
+	string MapName { get; }
+	Dictionary<int, Vector> CTSpawnCoordinates { get; }
+	Dictionary<int, Vector> TSpawnCoordinates { get; }
 }

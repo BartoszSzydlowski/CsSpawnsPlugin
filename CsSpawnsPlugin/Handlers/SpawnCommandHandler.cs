@@ -8,10 +8,10 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 {
 	public Dictionary<int, Vector> TSpawnCoordinates { get; set; } = [];
 	public Dictionary<int, Vector> CTSpawnCoordinates { get; set; } = [];
+	public string MapName { get; set; } = string.Empty;
 
 	public void Handle(CCSPlayerController? player, CommandInfo command, ILogger logger)
 	{
-		logger.LogInformation("Spawn counts — T: {TCount}, CT: {CTCount}", TSpawnCoordinates.Count, CTSpawnCoordinates.Count);
 		if (player?.IsValid != true) return;
 
 		if (!CheckCommandArgCount(player, command)) return;
@@ -20,13 +20,15 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		if (pawn == null) return;
 
 		var team = player.Team;
-		logger.LogInformation("Player team: {playerTeam}", player.Team);
 		var selectedSpawn = GetSpawnInserted(player, command);
-		var vector = GetSpawnVector(team, selectedSpawn, logger);
+		var vector = GetSpawnVector(team, selectedSpawn);
 
 		if (vector == null)
 		{
-			logger.LogInformation("Invalid spawn number {spawn}", selectedSpawn);
+			player?.PrintToChat($"Invalid spawn number {selectedSpawn}." +
+				$"Possible spawns range for map '{MapName}': " +
+				$"T: {TSpawnCoordinates.Keys.ToArray()[0]}-{TSpawnCoordinates.Keys.ToArray()[TSpawnCoordinates.Keys.Last()]}" +
+				$"CT: {CTSpawnCoordinates.Keys.ToArray()[0]}-{CTSpawnCoordinates.Keys.ToArray()[CTSpawnCoordinates.Keys.Last()]}");
 			return;
 		}
 		pawn.Teleport(vector);
@@ -36,7 +38,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 	{
 		if (command.ArgCount != 2)
 		{
-			player?.PrintToChat("Usage: .spawn <number>");
+			player?.PrintToChat("Too much arguments specified. Usage: '.spawn <number>'");
 			return false;
 		}
 		return true;
@@ -47,7 +49,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		var spawnFromCommand = command.GetArg(1);
 		if (!int.TryParse(spawnFromCommand, out int spawnPosition))
 		{
-			player?.PrintToChat("Usage: .spawn <number>");
+			player?.PrintToChat("A number was not provided. Usage: '.spawn <number>'");
 			return 0;
 		}
 		return spawnPosition;
@@ -59,15 +61,13 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		return vector;
 	}
 
-	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn, ILogger logger)
+	private Vector? GetSpawnVector(CsTeam team, int selectedSpawn)
 	{
 		Dictionary<int, Vector>? dictionary;
 
 		if (team == CsTeam.Terrorist) dictionary = TSpawnCoordinates;
 		else if (team == CsTeam.CounterTerrorist) dictionary = CTSpawnCoordinates;
 		else return null;
-
-		logger.LogInformation("Returned spawns: {spawns}", dictionary.ToString() ?? "none");
 
 		return GetSpawnCoordinates(selectedSpawn, dictionary);
 	}

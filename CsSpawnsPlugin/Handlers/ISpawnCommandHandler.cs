@@ -6,8 +6,9 @@ using Microsoft.Extensions.Logging;
 namespace CsSpawnsPlugin.Handlers;
 public interface ISpawnCommandHandler
 {
-	public Dictionary<int, Vector> TSpawnCoordinates { get; set; }
-	public Dictionary<int, Vector> CTSpawnCoordinates { get; set; }
+	Dictionary<int, Vector> TSpawnCoordinates { get; set; }
+	Dictionary<int, Vector> CTSpawnCoordinates { get; set; }
+	string MapName { get; set; }
 
 	void Handle(CCSPlayerController? player, CommandInfo command, ILogger logger);
 }
