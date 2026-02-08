@@ -2,7 +2,6 @@
 using CounterStrikeSharp.API.Modules.Commands;
 using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
-using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
@@ -22,7 +21,6 @@ public class SpawnsPlugin(
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
-		Logger.LogInformation("Plugin loaded successfully!");
 	}
 
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info)
@@ -60,6 +58,6 @@ public class SpawnsPlugin(
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
-		spawnCommandHandler.MapName = this.mapName;
+		spawnCommandHandler.MapName = mapName;
 	}
 }
