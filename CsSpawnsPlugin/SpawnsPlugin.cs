@@ -12,7 +12,7 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.16-beta";
+	public override string ModuleVersion => "0.0.17-beta";
 
 	private string mapName = string.Empty;
 
@@ -22,7 +22,6 @@ public class SpawnsPlugin(
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		RegisterEventHandler<EventPlayerChat>(OnPlayerChat);
-		//AddCommand(".spawn", "Teleport to a spawn", CommandSpawn);
 	}
 
 	private HookResult OnPlayerChat(EventPlayerChat @event, GameEventInfo info)
@@ -33,27 +32,9 @@ public class SpawnsPlugin(
 
 		string message = @event.Text?.Trim() ?? "";
 
-		// Example: ".spawn 2"
 		if (!message.StartsWith(".spawn", StringComparison.OrdinalIgnoreCase))
 			return HookResult.Continue;
-
-		//var args = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-		//if (args.Length < 2)
-		//{
-		//	player.PrintToChat("Usage: .spawn <number>");
-		//	return HookResult.Handled;
-		//}
-
-		//if (!int.TryParse(args[1], out int spawnId))
-		//{
-		//	player.PrintToChat("Invalid spawn number.");
-		//	return HookResult.Handled;
-		//}
-		//HandleSpawn(player, spawnId);
-
 		spawnCommandHandler.Handle(player, message, Logger);
-		// Prevent the message from showing in chat (optional)
 		return HookResult.Handled;
 	}
 
@@ -67,12 +48,6 @@ public class SpawnsPlugin(
 		this.mapName = mapName;
 		InitMapSpawns(this.mapName);
 	}
-
-	//private void CommandSpawn(CCSPlayerController? player, CommandInfo command)
-	//{
-	//	if (player?.IsValid != true) return;
-	//	spawnCommandHandler.Handle(player, command, Logger);
-	//}
 
 	private void InitMapSpawns(string mapName)
 	{

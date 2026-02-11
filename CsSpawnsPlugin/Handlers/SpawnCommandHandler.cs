@@ -31,6 +31,7 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 			return;
 		}
 		player.PlayerPawn.Value?.Teleport(vector);
+		player.PrintToChat($"Teleported to spawn ${selectedSpawn}");
 	}
 
 	private static bool CheckCommandArgCount(CCSPlayerController? player, string[] command)
