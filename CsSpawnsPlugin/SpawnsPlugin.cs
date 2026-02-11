@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Events;
 using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
+using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
@@ -21,13 +22,13 @@ public class SpawnsPlugin(
 		RegisterListener<OnMapStart>(OnMapStart);
 		RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
-		RegisterEventHandler<EventPlayerChat>(OnPlayerChat);
+		RegisterEventHandler<EventPlayerChat>(TeleportToSpawnCommand);
 	}
 
-	private HookResult OnPlayerChat(EventPlayerChat @event, GameEventInfo info)
+	private HookResult TeleportToSpawnCommand(EventPlayerChat @event, GameEventInfo info)
 	{
 		var player = Utilities.GetPlayerFromUserid(@event.Userid);
-		if (player == null || !player.IsValid)
+		if (player?.IsValid != true)
 			return HookResult.Continue;
 
 		string message = @event.Text?.Trim() ?? "";
@@ -45,6 +46,21 @@ public class SpawnsPlugin(
 
 	private void OnMapStart(string mapName)
 	{
+		var util1 = Utilities.FindAllEntitiesByDesignerName<CBaseEntity>("info_player_terrorist");
+		var util2 = Utilities.FindAllEntitiesByDesignerName<CBaseEntity>("info_player_counterterrorist");
+		var count = 0;
+		foreach (var util in util1)
+		{
+			count++;
+			Logger.LogInformation("TSpawn {count}: X - {X}, Y - {Y}, Z - {Z}", count, util.AbsOrigin?.X, util.AbsOrigin?.Y, util.AbsOrigin?.Z);
+		}
+		count = 0;
+		foreach (var util in util2)
+		{
+			count++;
+			Logger.LogInformation("CTSpawn {count}: X - {X}, Y - {Y}, Z - {Z}", count, util.AbsOrigin?.X, util.AbsOrigin?.Y, util.AbsOrigin?.Z);
+		}
+
 		this.mapName = mapName;
 		InitMapSpawns(this.mapName);
 	}
