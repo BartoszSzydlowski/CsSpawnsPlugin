@@ -13,7 +13,7 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.17-beta";
+	public override string ModuleVersion => "0.0.18-beta";
 
 	private string mapName = string.Empty;
 
