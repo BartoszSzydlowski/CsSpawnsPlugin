@@ -3,7 +3,6 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Events;
 using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
-using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
@@ -13,7 +12,7 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.19-beta";
+	public override string ModuleVersion => "0.0.20-beta";
 
 	private string mapName = string.Empty;
 
@@ -36,34 +35,19 @@ public class SpawnsPlugin(
 		if (!message.StartsWith(".spawn", StringComparison.OrdinalIgnoreCase))
 			return HookResult.Continue;
 		spawnCommandHandler.Handle(player, message, Logger);
-		Server.PrintToConsole($"{ModuleName}, {ModuleVersion} loaded ");
 		return HookResult.Handled;
 	}
 
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info) =>
 		(@event.Userid?.IsValid != true) ? HookResult.Continue : HookResult.Continue;
 
-	private void OnMapEnd() => mapName = string.Empty;
+	private void OnMapEnd()
+	{
+		mapName = string.Empty;
+	}
 
 	private void OnMapStart(string mapName)
 	{
-		var util1 = Utilities.FindAllEntitiesByDesignerName<CBaseEntity>("info_player_terrorist");
-		var util2 = Utilities.FindAllEntitiesByDesignerName<CBaseEntity>("info_player_counterterrorist");
-		var count = 0;
-		foreach (var util in util1)
-		{
-			count++;
-			Logger.LogInformation("TSpawn {count}: X - {X}, Y - {Y}, Z - {Z}", count, util.AbsOrigin?.X, util.AbsOrigin?.Y, util.AbsOrigin?.Z);
-			Server.PrintToConsole($"TSpawn ${count}: X - ${util.AbsOrigin?.X}, Y - ${util.AbsOrigin?.Y}, Z - ${util.AbsOrigin?.Z}");
-		}
-		count = 0;
-		foreach (var util in util2)
-		{
-			count++;
-			Logger.LogInformation("CTSpawn {count}: X - {X}, Y - {Y}, Z - {Z}", count, util.AbsOrigin?.X, util.AbsOrigin?.Y, util.AbsOrigin?.Z);
-			Server.PrintToConsole($"TSpawn ${count}: X - ${util.AbsOrigin?.X}, Y - ${util.AbsOrigin?.Y}, Z - ${util.AbsOrigin?.Z}");
-		}
-
 		this.mapName = mapName;
 		InitMapSpawns(this.mapName);
 	}
