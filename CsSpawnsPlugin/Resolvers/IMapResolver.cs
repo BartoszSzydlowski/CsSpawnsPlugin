@@ -1,5 +1,5 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider;
+using CsSpawnsPlugin.MapProvider.Common;
 
 namespace CsSpawnsPlugin.Resolvers;
 public interface IMapResolver

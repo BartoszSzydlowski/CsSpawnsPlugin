@@ -1,6 +1,7 @@
 ﻿
 using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.Consts;
+using CsSpawnsPlugin.MapProvider.Common;
 
 namespace CsSpawnsPlugin.MapProvider;
 public class MirageSpawnsProvider : BaseSpawnsProvider

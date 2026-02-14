@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
 
-namespace CsSpawnsPlugin.MapProvider;
+namespace CsSpawnsPlugin.MapProvider.Common;
 public interface IBaseSpawnsProvider
 {
 	string MapName { get; }

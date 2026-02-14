@@ -1,5 +1,5 @@
 ﻿using CsSpawnsPlugin.IoC;
-using CsSpawnsPlugin.MapProvider;
+using CsSpawnsPlugin.MapProvider.Common;
 using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 
