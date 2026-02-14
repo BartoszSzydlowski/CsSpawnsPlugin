@@ -17,10 +17,10 @@ public class AncientSpawnsProvider : BaseSpawnsProvider
 
 	public override Dictionary<int, Vector> TSpawnCoordinates => new()
 	{
-		{ 1, new Vector(-328.000000f, -2288.000000f, -99.255737f) },
-		{ 2, new Vector(-392.000000f, -2224.000000f, -99.255737f) },
-		{ 3, new Vector(-456.000000f, -2288.000000f, -99.255737f) },
-		{ 4, new Vector(-520.000000f, -2224.000000f, -99.255737f) },
-		{ 5, new Vector(-584.000000f, -2288.000000f, -98.776489f) },
+		{ 1, new Vector(-328.0f, -2288.0f, -99.255737f) },
+		{ 2, new Vector(-392.0f, -2224.0f, -99.255737f) },
+		{ 3, new Vector(-456.0f, -2288.0f, -99.255737f) },
+		{ 4, new Vector(-520.0f, -2224.0f, -99.255737f) },
+		{ 5, new Vector(-584.0f, -2288.0f, -98.776489f) },
 	};
 }
