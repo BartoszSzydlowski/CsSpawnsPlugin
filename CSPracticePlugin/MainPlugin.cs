@@ -13,7 +13,7 @@ public class MainPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "CSPracticePlugin";
-	public override string ModuleVersion => "0.0.27-beta";
+	public override string ModuleVersion => "0.0.28-beta";
 
 	private string _mapName = string.Empty;
 
