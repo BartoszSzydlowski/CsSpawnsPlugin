@@ -13,14 +13,12 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.22-beta";
-
-	private string mapName = string.Empty;
+	public override string ModuleVersion => "0.0.23-beta";
 
 	public override void Load(bool hotReload)
 	{
 		RegisterListener<OnMapStart>(OnMapStart);
-		RegisterListener<OnMapEnd>(OnMapEnd);
+		//RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		RegisterEventHandler<EventPlayerChat>(TeleportToSpawnCommand);
 	}
@@ -70,15 +68,9 @@ public class SpawnsPlugin(
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info) =>
 		(@event.Userid?.IsValid != true) ? HookResult.Continue : HookResult.Continue;
 
-	private void OnMapEnd()
-	{
-		mapName = string.Empty;
-	}
-
 	private void OnMapStart(string mapName)
 	{
-		//this.mapName = mapName;
-		InitMapSpawns(this.mapName);
+		InitMapSpawns(mapName);
 		Logger.LogInformation("Started map {mapName}", string.IsNullOrWhiteSpace(mapName) ? "map name not init" : mapName);
 	}
 

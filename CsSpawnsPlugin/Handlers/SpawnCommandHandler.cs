@@ -11,6 +11,8 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 
 	public void Handle(CCSPlayerController? player, string text, ILogger logger)
 	{
+		logger.LogInformation("Resolved map name {mapName}", string.IsNullOrWhiteSpace(MapName) ? "map name not resolved" : MapName)
+
 		if (player?.IsValid != true) return;
 
 		var command = text.Split(' ');
