@@ -13,7 +13,9 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.25-beta";
+	public override string ModuleVersion => "0.0.26-beta";
+
+	private string _mapName = string.Empty;
 
 	public override void Load(bool hotReload)
 	{
@@ -21,6 +23,13 @@ public class SpawnsPlugin(
 		//RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		RegisterEventHandler<EventPlayerChat>(TeleportToSpawnCommand);
+		RegisterEventHandler<EventPlayerTeam>(OnPlayerTeamChange);
+	}
+
+	private HookResult OnPlayerTeamChange(EventPlayerTeam @event, GameEventInfo info)
+	{
+		_mapName = Server.MapName;
+		return HookResult.Handled;
 	}
 
 	private HookResult TeleportToSpawnCommand(EventPlayerChat @event, GameEventInfo info)
@@ -65,12 +74,23 @@ public class SpawnsPlugin(
 		return HookResult.Handled;
 	}
 
-	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info) =>
-		(@event.Userid?.IsValid != true) ? HookResult.Continue : HookResult.Continue;
+	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info)
+	{
+		_mapName = Server.MapName;
+		if (@event.Userid?.IsValid != true)
+		{
+			return HookResult.Continue;
+		}
+		else
+		{
+			return HookResult.Continue;
+		}
+	}
 
 	private void OnMapStart(string mapName)
 	{
-		InitMapSpawns(mapName);
+		_mapName = mapName;
+		InitMapSpawns(_mapName);
 		Logger.LogInformation("Started map {mapName}", string.IsNullOrWhiteSpace(mapName) ? "map name not init" : mapName);
 	}
 
@@ -81,6 +101,6 @@ public class SpawnsPlugin(
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
-		spawnCommandHandler.MapName = mapName;
+		spawnCommandHandler.MapName = _mapName;
 	}
 }
