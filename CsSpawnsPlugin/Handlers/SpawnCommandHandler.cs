@@ -28,8 +28,8 @@ public class SpawnCommandHandler : ISpawnCommandHandler
 		{
 			player?.PrintToChat($"Invalid spawn number {selectedSpawn}.");
 			player?.PrintToChat($"Possible spawns range for map '{MapName}': ");
-			player?.PrintToChat($"T: {TSpawnCoordinates.Keys.ToArray()[0]}-{TSpawnCoordinates.Keys.ToArray()[TSpawnCoordinates.Keys.Last()]}");
-			player?.PrintToChat($"CT: {CTSpawnCoordinates.Keys.ToArray()[0]}-{CTSpawnCoordinates.Keys.ToArray()[CTSpawnCoordinates.Keys.Last()]}");
+			player?.PrintToChat($"T: {TSpawnCoordinates.Keys.First()}-{TSpawnCoordinates.Keys.Last()}");
+			player?.PrintToChat($"CT: {CTSpawnCoordinates.Keys.First()}-{CTSpawnCoordinates.Keys.Last()}");
 			return;
 		}
 		player.PlayerPawn.Value?.Teleport(vector);

@@ -13,7 +13,7 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.24-beta";
+	public override string ModuleVersion => "0.0.25-beta";
 
 	public override void Load(bool hotReload)
 	{
