@@ -22,7 +22,13 @@ public class DependencyInjection : IPluginServiceCollection<SpawnsPlugin>
 
 	private static void RegisterMapSpawns(IServiceCollection services)
 	{
+		services.AddScoped<IBaseSpawnsProvider, AncientSpawnsProvider>();
+		services.AddScoped<IBaseSpawnsProvider, AnubisSpawnsProvider>();
+		services.AddScoped<IBaseSpawnsProvider, Dust2SpawnsProvider>();
+		services.AddScoped<IBaseSpawnsProvider, InfernoSpawnsProvider>();
 		services.AddScoped<IBaseSpawnsProvider, MirageSpawnsProvider>();
+		services.AddScoped<IBaseSpawnsProvider, NukeSpawnsProvider>();
+		services.AddScoped<IBaseSpawnsProvider, OverpassSpawnsProvider>();
 	}
 
 	private static void RegisterHandlers(IServiceCollection services)
