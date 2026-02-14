@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Events;
 using CsSpawnsPlugin.Handlers;
 using CsSpawnsPlugin.Resolvers;
+using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace CsSpawnsPlugin;
@@ -12,7 +13,7 @@ public class SpawnsPlugin(
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
 	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.20-beta";
+	public override string ModuleVersion => "0.0.21-beta";
 
 	private string mapName = string.Empty;
 
@@ -76,8 +77,9 @@ public class SpawnsPlugin(
 
 	private void OnMapStart(string mapName)
 	{
-		this.mapName = mapName;
+		//this.mapName = mapName;
 		InitMapSpawns(this.mapName);
+		Logger.LogInformation("Started map {mapName}", string.IsNullOrWhiteSpace(mapName) ? "map name not init" : mapName);
 	}
 
 	private void InitMapSpawns(string mapName)
