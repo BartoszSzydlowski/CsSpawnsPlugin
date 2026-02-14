@@ -20,7 +20,6 @@ public class SpawnsPlugin(
 	public override void Load(bool hotReload)
 	{
 		RegisterListener<OnMapStart>(OnMapStart);
-		//RegisterListener<OnMapEnd>(OnMapEnd);
 		RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawned);
 		RegisterEventHandler<EventPlayerChat>(TeleportToSpawnCommand);
 		RegisterEventHandler<EventPlayerTeam>(OnPlayerTeamChange);
@@ -101,6 +100,5 @@ public class SpawnsPlugin(
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
-		spawnCommandHandler.MapName = _mapName;
 	}
 }
