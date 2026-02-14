@@ -45,33 +45,33 @@ public class MainPlugin(
 		return HookResult.Handled;
 	}
 
-	private HookResult TeleportToTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
-	{
-		var player = Utilities.GetPlayerFromUserid(@event.Userid);
-		if (player?.IsValid != true)
-			return HookResult.Continue;
+	//private HookResult TeleportToTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
+	//{
+	//	var player = Utilities.GetPlayerFromUserid(@event.Userid);
+	//	if (player?.IsValid != true)
+	//		return HookResult.Continue;
 
-		string message = @event.Text?.Trim() ?? "";
+	//	string message = @event.Text?.Trim() ?? "";
 
-		if (!message.StartsWith(".tspawn", StringComparison.OrdinalIgnoreCase))
-			return HookResult.Continue;
-		spawnCommandHandler.Handle(player, message, Logger);
-		return HookResult.Handled;
-	}
+	//	if (!message.StartsWith(".tspawn", StringComparison.OrdinalIgnoreCase))
+	//		return HookResult.Continue;
+	//	spawnCommandHandler.Handle(player, message, Logger);
+	//	return HookResult.Handled;
+	//}
 
-	private HookResult TeleportToCTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
-	{
-		var player = Utilities.GetPlayerFromUserid(@event.Userid);
-		if (player?.IsValid != true)
-			return HookResult.Continue;
+	//private HookResult TeleportToCTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
+	//{
+	//	var player = Utilities.GetPlayerFromUserid(@event.Userid);
+	//	if (player?.IsValid != true)
+	//		return HookResult.Continue;
 
-		string message = @event.Text?.Trim() ?? "";
+	//	string message = @event.Text?.Trim() ?? "";
 
-		if (!message.StartsWith(".ctspawn", StringComparison.OrdinalIgnoreCase))
-			return HookResult.Continue;
-		spawnCommandHandler.Handle(player, message, Logger);
-		return HookResult.Handled;
-	}
+	//	if (!message.StartsWith(".ctspawn", StringComparison.OrdinalIgnoreCase))
+	//		return HookResult.Continue;
+	//	spawnCommandHandler.Handle(player, message, Logger);
+	//	return HookResult.Handled;
+	//}
 
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info)
 	{
@@ -100,5 +100,6 @@ public class MainPlugin(
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
+		spawnCommandHandler.MapName = _mapName;
 	}
 }
