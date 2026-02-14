@@ -1,9 +1,10 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
+using CsSpawnsPlugin.Consts;
 
 namespace CsSpawnsPlugin.MapProvider;
 public class AnubisSpawnsProvider : BaseSpawnsProvider
 {
-	public override string MapName => throw new NotImplementedException();
+	public override string MapName => MapNames.Anubis;
 
 	public override Dictionary<int, Vector> CTSpawnCoordinates => new()
 	{
