@@ -12,8 +12,8 @@ public class MainPlugin(
 	IMapResolver mapResolver,
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
-	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.26-beta";
+	public override string ModuleName => "CSPracticePlugin";
+	public override string ModuleVersion => "0.0.27-beta";
 
 	private string _mapName = string.Empty;
 
