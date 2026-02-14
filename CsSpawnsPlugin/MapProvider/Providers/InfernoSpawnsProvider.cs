@@ -2,7 +2,7 @@
 using CsSpawnsPlugin.Consts;
 using CsSpawnsPlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.MapProvider;
+namespace CsSpawnsPlugin.MapProvider.Providers;
 public class InfernoSpawnsProvider : BaseSpawnsProvider
 {
 	public override string MapName => MapNames.Inferno;

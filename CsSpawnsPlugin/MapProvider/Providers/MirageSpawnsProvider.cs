@@ -3,7 +3,7 @@ using CounterStrikeSharp.API.Modules.Utils;
 using CsSpawnsPlugin.Consts;
 using CsSpawnsPlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.MapProvider;
+namespace CsSpawnsPlugin.MapProvider.Providers;
 public class MirageSpawnsProvider : BaseSpawnsProvider
 {
 	public override string MapName => MapNames.Mirage;

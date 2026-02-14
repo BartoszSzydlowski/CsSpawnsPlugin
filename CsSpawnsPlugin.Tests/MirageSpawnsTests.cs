@@ -1,5 +1,5 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider;
+using CsSpawnsPlugin.MapProvider.Providers;
 
 namespace CsSpawnsPlugin.Tests;
 

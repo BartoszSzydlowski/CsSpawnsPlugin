@@ -2,7 +2,7 @@
 using CsSpawnsPlugin.Consts;
 using CsSpawnsPlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.MapProvider;
+namespace CsSpawnsPlugin.MapProvider.Providers;
 public class Dust2SpawnsProvider : BaseSpawnsProvider
 {
 	public override string MapName => MapNames.Dust2;
