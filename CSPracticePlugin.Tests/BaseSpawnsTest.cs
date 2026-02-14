@@ -1,6 +1,6 @@
-﻿using CsSpawnsPlugin.IoC;
+﻿using CSPracticePlugin.Resolvers;
+using CsSpawnsPlugin.IoC;
 using CsSpawnsPlugin.MapProvider.Common;
-using CsSpawnsPlugin.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CsSpawnsPlugin.Tests;
@@ -28,6 +28,5 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 	[TestCleanup]
 	public void TestCleanup()
 	{
-
 	}
 }

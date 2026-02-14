@@ -1,8 +1,9 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.Consts;
-using CsSpawnsPlugin.MapProvider.Common;
+using CSPracticePlugin.Consts;
+using CSPracticePlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.MapProvider.Providers;
+namespace CSPracticePlugin.MapProvider.Providers;
+
 public class AncientSpawnsProvider : BaseSpawnsProvider
 {
 	public override string MapName => MapNames.Ancient;

@@ -1,5 +1,5 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.Resolvers;
+using CSPracticePlugin.Resolvers;
 
 namespace CsSpawnsPlugin.Tests;
 

@@ -1,9 +1,11 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider.Common;
+using CSPracticePlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.Resolvers;
+namespace CSPracticePlugin.Resolvers;
+
 public interface IMapResolver
 {
 	IBaseSpawnsProvider? Resolve(string mapName);
+
 	Vector? GetSpawn(int spawnNumber, Dictionary<int, Vector> spawns);
 }

@@ -1,4 +1,5 @@
-﻿namespace CsSpawnsPlugin.Consts;
+﻿namespace CSPracticePlugin.Consts;
+
 public static class MapNames
 {
 	public const string Mirage = "de_mirage";

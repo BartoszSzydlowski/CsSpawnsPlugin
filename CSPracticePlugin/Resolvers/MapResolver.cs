@@ -1,7 +1,8 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider.Common;
+using CSPracticePlugin.MapProvider.Common;
 
-namespace CsSpawnsPlugin.Resolvers;
+namespace CSPracticePlugin.Resolvers;
+
 public class MapResolver(IEnumerable<IBaseSpawnsProvider> spawnsProviders) : IMapResolver
 {
 	private readonly Dictionary<string, IBaseSpawnsProvider> spawnsProvdersDic

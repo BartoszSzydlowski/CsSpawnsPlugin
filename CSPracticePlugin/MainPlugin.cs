@@ -1,14 +1,14 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Events;
-using CsSpawnsPlugin.Handlers;
-using CsSpawnsPlugin.Resolvers;
+using CSPracticePlugin.Handlers;
+using CSPracticePlugin.Resolvers;
 using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
-namespace CsSpawnsPlugin;
+namespace CSPracticePlugin;
 
-public class SpawnsPlugin(
+public class MainPlugin(
 	IMapResolver mapResolver,
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {

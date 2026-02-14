@@ -2,7 +2,8 @@
 using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace CsSpawnsPlugin.Handlers;
+namespace CSPracticePlugin.Handlers;
+
 public class SpawnCommandHandler : ISpawnCommandHandler
 {
 	public Dictionary<int, Vector> TSpawnCoordinates { get; set; } = [];

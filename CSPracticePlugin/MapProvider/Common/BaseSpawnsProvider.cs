@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
 
-namespace CsSpawnsPlugin.MapProvider.Common;
+namespace CSPracticePlugin.MapProvider.Common;
 
 public abstract class BaseSpawnsProvider : IBaseSpawnsProvider
 {

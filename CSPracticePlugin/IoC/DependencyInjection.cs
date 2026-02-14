@@ -1,12 +1,13 @@
 ﻿using CounterStrikeSharp.API.Core;
-using CsSpawnsPlugin.Handlers;
-using CsSpawnsPlugin.MapProvider.Common;
-using CsSpawnsPlugin.MapProvider.Providers;
-using CsSpawnsPlugin.Resolvers;
+using CSPracticePlugin.Handlers;
+using CSPracticePlugin.MapProvider.Common;
+using CSPracticePlugin.MapProvider.Providers;
+using CSPracticePlugin.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CsSpawnsPlugin.IoC;
-public class DependencyInjection : IPluginServiceCollection<SpawnsPlugin>
+namespace CSPracticePlugin.IoC;
+
+public class DependencyInjection : IPluginServiceCollection<MainPlugin>
 {
 	public void ConfigureServices(IServiceCollection serviceCollection)
 	{

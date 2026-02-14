@@ -50,4 +50,3 @@ public class MirageSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
 		Assert.IsNull(result);
 	}
 }
-
