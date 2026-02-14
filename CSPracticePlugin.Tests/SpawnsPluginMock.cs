@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
 using CSPracticePlugin.Resolvers;
 
-namespace CsSpawnsPlugin.Tests;
+namespace CSPracticePlugin.Tests;
 
 public class SpawnsPluginMock(IMapResolver mapResolver)
 {
@@ -10,8 +10,8 @@ public class SpawnsPluginMock(IMapResolver mapResolver)
 	public static string ModuleVersion => "1.0";
 
 	public string MapName { get; set; } = string.Empty;
-	private Dictionary<int, Vector> tSpawnCoordinates = [];
-	private Dictionary<int, Vector> ctSpawnCoordinates = [];
+	private Dictionary<int, Vector> _tSpawnCoordinates = [];
+	private Dictionary<int, Vector> _ctSpawnCoordinates = [];
 
 	public void Load(bool hotReload)
 	{
@@ -39,9 +39,9 @@ public class SpawnsPluginMock(IMapResolver mapResolver)
 	{
 		Vector? vector;
 		if (team == CsTeam.Terrorist)
-			vector = GetSpawnCoordinates(selectedSpawn, tSpawnCoordinates);
+			vector = GetSpawnCoordinates(selectedSpawn, _tSpawnCoordinates);
 		else if (team == CsTeam.CounterTerrorist)
-			vector = GetSpawnCoordinates(selectedSpawn, ctSpawnCoordinates);
+			vector = GetSpawnCoordinates(selectedSpawn, _ctSpawnCoordinates);
 		else
 			vector = null;
 		return vector;
@@ -61,8 +61,8 @@ public class SpawnsPluginMock(IMapResolver mapResolver)
 
 		if (mapSpawns == null) return;
 
-		tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
-		ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
+		_tSpawnCoordinates = mapSpawns.TSpawnCoordinates;
+		_ctSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
 	}
 
 	private int GetSpawnInserted(string command)
