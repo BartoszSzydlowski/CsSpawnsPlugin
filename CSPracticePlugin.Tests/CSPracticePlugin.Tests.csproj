@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CsSpawnsPlugin\CsSpawnsPlugin.csproj" />
+    <ProjectReference Include="..\CSPracticePlugin\CSPracticePlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

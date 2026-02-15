@@ -28,11 +28,11 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore CsSpawnsPlugin/CsSpawnsPlugin.csproj
+        run: dotnet restore CSPracticePlugin/CSPracticePlugin.csproj
 
       - name: Build (Release)
         run: |
-          dotnet build CsSpawnsPlugin/CsSpawnsPlugin.csproj \
+          dotnet build CSPracticePlugin/CSPracticePlugin.csproj \
             --configuration Release \
             --no-restore
 
@@ -42,18 +42,18 @@ jobs:
           mkdir -p artifact/addons
           mkdir -p artifact/addons/counterstrikesharp
           mkdir -p artifact/addons/counterstrikesharp/plugins
-          mkdir -p artifact/addons/counterstrikesharp/plugins/CsSpawnsPlugin
-          cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.dll \
-            artifact/addons/counterstrikesharp/plugins/CsSpawnsPlugin/
-          cp CsSpawnsPlugin/bin/Release/net8.0/CsSpawnsPlugin.pdb \
-          artifact/addons/counterstrikesharp/plugins/CsSpawnsPlugin/ || true
+          mkdir -p artifact/addons/counterstrikesharp/plugins/CSPracticePlugin
+          cp CSPracticePlugin/bin/Release/net8.0/CSPracticePlugin.dll \
+            artifact/addons/counterstrikesharp/plugins/CSPracticePlugin/
+          cp CSPracticePlugin/bin/Release/net8.0/CSPracticePlugin.pdb \
+          artifact/addons/counterstrikesharp/plugins/CSPracticePlugin/ || true
 
       - name: Zip release artifact
         run: |
           cd artifact
-          zip -r ../CsSpawnsPlugin-${{ github.ref_name }}.zip .
+          zip -r ../CSPracticePlugin-${{ github.ref_name }}.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: CsSpawnsPlugin-${{ github.ref_name }}.zip
+          files: CSPracticePlugin-${{ github.ref_name }}.zip

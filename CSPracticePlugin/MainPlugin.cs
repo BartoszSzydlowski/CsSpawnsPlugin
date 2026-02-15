@@ -1,19 +1,19 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Events;
-using CsSpawnsPlugin.Handlers;
-using CsSpawnsPlugin.Resolvers;
+using CSPracticePlugin.Handlers;
+using CSPracticePlugin.Resolvers;
 using Microsoft.Extensions.Logging;
 using static CounterStrikeSharp.API.Core.Listeners;
 
-namespace CsSpawnsPlugin;
+namespace CSPracticePlugin;
 
-public class SpawnsPlugin(
+public class MainPlugin(
 	IMapResolver mapResolver,
 	ISpawnCommandHandler spawnCommandHandler) : BasePlugin
 {
-	public override string ModuleName => "SpawnsPlugin";
-	public override string ModuleVersion => "0.0.26-beta";
+	public override string ModuleName => "CSPracticePlugin";
+	public override string ModuleVersion => "0.0.28-beta";
 
 	private string _mapName = string.Empty;
 
@@ -45,33 +45,33 @@ public class SpawnsPlugin(
 		return HookResult.Handled;
 	}
 
-	private HookResult TeleportToTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
-	{
-		var player = Utilities.GetPlayerFromUserid(@event.Userid);
-		if (player?.IsValid != true)
-			return HookResult.Continue;
+	//private HookResult TeleportToTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
+	//{
+	//	var player = Utilities.GetPlayerFromUserid(@event.Userid);
+	//	if (player?.IsValid != true)
+	//		return HookResult.Continue;
 
-		string message = @event.Text?.Trim() ?? "";
+	//	string message = @event.Text?.Trim() ?? "";
 
-		if (!message.StartsWith(".tspawn", StringComparison.OrdinalIgnoreCase))
-			return HookResult.Continue;
-		spawnCommandHandler.Handle(player, message, Logger);
-		return HookResult.Handled;
-	}
+	//	if (!message.StartsWith(".tspawn", StringComparison.OrdinalIgnoreCase))
+	//		return HookResult.Continue;
+	//	spawnCommandHandler.Handle(player, message, Logger);
+	//	return HookResult.Handled;
+	//}
 
-	private HookResult TeleportToCTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
-	{
-		var player = Utilities.GetPlayerFromUserid(@event.Userid);
-		if (player?.IsValid != true)
-			return HookResult.Continue;
+	//private HookResult TeleportToCTSpawnCommand(EventPlayerChat @event, GameEventInfo info)
+	//{
+	//	var player = Utilities.GetPlayerFromUserid(@event.Userid);
+	//	if (player?.IsValid != true)
+	//		return HookResult.Continue;
 
-		string message = @event.Text?.Trim() ?? "";
+	//	string message = @event.Text?.Trim() ?? "";
 
-		if (!message.StartsWith(".ctspawn", StringComparison.OrdinalIgnoreCase))
-			return HookResult.Continue;
-		spawnCommandHandler.Handle(player, message, Logger);
-		return HookResult.Handled;
-	}
+	//	if (!message.StartsWith(".ctspawn", StringComparison.OrdinalIgnoreCase))
+	//		return HookResult.Continue;
+	//	spawnCommandHandler.Handle(player, message, Logger);
+	//	return HookResult.Handled;
+	//}
 
 	private HookResult OnPlayerSpawned(EventPlayerSpawn @event, GameEventInfo info)
 	{
@@ -100,5 +100,6 @@ public class SpawnsPlugin(
 
 		spawnCommandHandler.TSpawnCoordinates = mapSpawns.TSpawnCoordinates;
 		spawnCommandHandler.CTSpawnCoordinates = mapSpawns.CTSpawnCoordinates;
+		spawnCommandHandler.MapName = _mapName;
 	}
 }

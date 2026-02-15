@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Modules.Utils;
-using CsSpawnsPlugin.MapProvider.Providers;
+using CSPracticePlugin.MapProvider.Providers;
 
-namespace CsSpawnsPlugin.Tests;
+namespace CSPracticePlugin.Tests;
 
 [TestClass]
 public class MirageSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
@@ -50,4 +50,3 @@ public class MirageSpawnsTests : BaseSpawnsTest<MirageSpawnsProvider>
 		Assert.IsNull(result);
 	}
 }
-

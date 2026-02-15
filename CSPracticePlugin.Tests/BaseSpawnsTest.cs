@@ -1,15 +1,15 @@
-﻿using CsSpawnsPlugin.IoC;
-using CsSpawnsPlugin.MapProvider.Common;
-using CsSpawnsPlugin.Resolvers;
+﻿using CSPracticePlugin.IoC;
+using CSPracticePlugin.MapProvider.Common;
+using CSPracticePlugin.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CsSpawnsPlugin.Tests;
+namespace CSPracticePlugin.Tests;
 
 public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 {
 	public abstract string MapName { get; }
 	protected SpawnsPluginMock Mock { get; set; } = default!;
-	private IMapResolver mapResolver = default!;
+	private IMapResolver _mapResolver = default!;
 
 	[TestInitialize]
 	public void TestInit()
@@ -17,8 +17,8 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 		var services = new ServiceCollection();
 		new DependencyInjection().ConfigureServices(services);
 		var provider = services.BuildServiceProvider();
-		mapResolver = provider.GetRequiredService<IMapResolver>();
-		Mock = new SpawnsPluginMock(mapResolver)
+		_mapResolver = provider.GetRequiredService<IMapResolver>();
+		Mock = new SpawnsPluginMock(_mapResolver)
 		{
 			MapName = MapName
 		};
@@ -28,6 +28,5 @@ public abstract class BaseSpawnsTest<T> where T : IBaseSpawnsProvider
 	[TestCleanup]
 	public void TestCleanup()
 	{
-
 	}
 }
